@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2a6bdfe7c9cfb3946af225be7845173d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - onRoundStartedEvent: {fileID: 11400000, guid: 1d214e0f5c3bd3840ae8dbe3be1cd35f, type: 2}
+  - miniGameWonEvent: {fileID: 11400000, guid: 9c1cbfdc88fd53a4db8ddb498fd6bed7, type: 2}
+  - miniGameLostEvent: {fileID: 11400000, guid: 74468a8914c5f184bb9cc4f604aafa0d, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
