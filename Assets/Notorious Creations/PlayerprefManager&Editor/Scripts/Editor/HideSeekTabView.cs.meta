@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2c2fd3142e796f644aff8c3d16ca1e1b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 329427
+  packageName: PlayerPrefs Editor & Manager
+  packageVersion: 1.2.1
+  assetPath: Assets/Notorious Creations/PlayerprefManager&Editor/Scripts/Editor/HideSeekTabView.cs
+  uploadId: 873500

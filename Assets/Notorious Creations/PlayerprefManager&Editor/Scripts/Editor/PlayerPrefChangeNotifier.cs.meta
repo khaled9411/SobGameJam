@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f4b25f5202a53034cbbb24523405510a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 329427
+  packageName: PlayerPrefs Editor & Manager
+  packageVersion: 1.2.1
+  assetPath: Assets/Notorious Creations/PlayerprefManager&Editor/Scripts/Editor/PlayerPrefChangeNotifier.cs
+  uploadId: 873500

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e8c8328d174d04247930addef1cd41dc
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 329427
+  packageName: PlayerPrefs Editor & Manager
+  packageVersion: 1.2.1
+  assetPath: Assets/Notorious Creations/PlayerprefManager&Editor/Scripts/Editor/PinTabView.cs
+  uploadId: 873500
