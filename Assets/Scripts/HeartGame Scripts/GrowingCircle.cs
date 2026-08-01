@@ -69,7 +69,6 @@ public class GrowingCircle : MonoBehaviour
         if (IsPerfectSize()) //change colour on perfect size
         {
             spriteRenderer.color = perfectColor;
-            Debug.Log("PefectSize");
         }
         else
         {

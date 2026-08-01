@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 
-public class CircleSpawner : MonoBehaviour   
+public class PhaseOneCircleSpawner : MonoBehaviour   
 {
     public event System.Action OnPerfectTiming;
     public event System.Action OnBadTiming;
@@ -19,16 +19,17 @@ public class CircleSpawner : MonoBehaviour
     }
     public void StopSpawning()
     {
-        StopCoroutine(SpawnRoutine());
+        StopAllCoroutines();
+        foreach (Transform child in parent)
+        {
+            Destroy(child.gameObject);
+        }
     }
     IEnumerator SpawnRoutine()
     {
         while(true)
         {
-            Vector2 spawnPosition = new Vector2(
-            Random.Range(minBounds.x, maxBounds.x),
-            Random.Range(minBounds.y, maxBounds.y));
-
+            Vector2 spawnPosition = GetRandomPosition();
 
             GrowingCircle circle =  Instantiate(circlePrefab, spawnPosition, Quaternion.identity, parent);
             circle.OnPerfectTiming += () => OnPerfectTiming?.Invoke();
@@ -42,5 +43,30 @@ public class CircleSpawner : MonoBehaviour
         }
         
     }
-   
+    private Vector2 GetRandomPosition()
+    {
+        const float minDistance = 1.5f;
+
+        while (true)
+        {
+            Vector2 position = new Vector2(
+                Random.Range(minBounds.x, maxBounds.x),
+                Random.Range(minBounds.y, maxBounds.y));
+
+            bool overlaps = false;
+
+            foreach (Transform child in parent)
+            {
+                if (Vector2.Distance(position, child.position) < minDistance)
+                {
+                    overlaps = true;
+                    break;
+                }
+            }
+
+            if (!overlaps)
+                return position;
+        }
+    }
+
 }
