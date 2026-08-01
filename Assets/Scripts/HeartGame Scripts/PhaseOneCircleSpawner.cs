@@ -12,6 +12,10 @@ public class PhaseOneCircleSpawner : MonoBehaviour
     [SerializeField] private Transform parent;
     [SerializeField] private Vector2 minBounds = new Vector2(-7f, -3.5f);
     [SerializeField] private Vector2 maxBounds = new Vector2(7f, 5f);
+    [SerializeField] private float baseGrowSpeed = 1.1f;
+    [SerializeField] private float maxGrowSpeed = 2.5f;
+
+    private float currentGrowSpeed;
 
     public void StartSpawning()
     {
@@ -32,6 +36,7 @@ public class PhaseOneCircleSpawner : MonoBehaviour
             Vector2 spawnPosition = GetRandomPosition();
 
             GrowingCircle circle =  Instantiate(circlePrefab, spawnPosition, Quaternion.identity, parent);
+            circle.SetGrowSpeed(currentGrowSpeed);
             circle.OnPerfectTiming += () => OnPerfectTiming?.Invoke();
             circle.OnBadTiming += () => OnBadTiming?.Invoke();
             circle.OnMissed += () => OnMissed?.Invoke();
@@ -67,6 +72,10 @@ public class PhaseOneCircleSpawner : MonoBehaviour
             if (!overlaps)
                 return position;
         }
+    }
+    public void SetDifficulty(float difficulty)
+    {
+        currentGrowSpeed = Mathf.Lerp(baseGrowSpeed, maxGrowSpeed, difficulty);
     }
 
 }
