@@ -1,8 +1,13 @@
 using System.Collections;
 using UnityEngine;
 
-public class CircleSpawner : MonoBehaviour
+
+public class CircleSpawner : MonoBehaviour   
 {
+    public event System.Action OnPerfectTiming;
+    public event System.Action OnBadTiming;
+    public event System.Action OnMissed;
+
     [SerializeField] private GrowingCircle circlePrefab;
     [SerializeField] private Transform parent;
     [SerializeField] private Vector2 minBounds = new Vector2(-7f, -3.5f);
@@ -11,6 +16,10 @@ public class CircleSpawner : MonoBehaviour
     public void StartSpawning()
     {
        StartCoroutine(SpawnRoutine());
+    }
+    public void StopSpawning()
+    {
+        StopCoroutine(SpawnRoutine());
     }
     IEnumerator SpawnRoutine()
     {
@@ -22,11 +31,16 @@ public class CircleSpawner : MonoBehaviour
 
 
             GrowingCircle circle =  Instantiate(circlePrefab, spawnPosition, Quaternion.identity, parent);
-            while(circle != null)
+            circle.OnPerfectTiming += () => OnPerfectTiming?.Invoke();
+            circle.OnBadTiming += () => OnBadTiming?.Invoke();
+            circle.OnMissed += () => OnMissed?.Invoke();
+
+            while (circle != null)
             {
               yield return null;
             }
         }
         
     }
+   
 }
