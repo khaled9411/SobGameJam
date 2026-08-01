@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using SobGameJam.MiniGames;
 
 public class NuclearNode : MonoBehaviour
 {
@@ -88,6 +89,6 @@ public class NuclearNode : MonoBehaviour
         innerSprite.DOColor(Color.red, 0.3f);
         transform.DOShakePosition(0.4f, 0.5f);
 
-        NuclearGameManager.Instance.LoseGame();
+        NuclearGameManager.Instance.LoseMiniGame();
     }
 }

@@ -2,204 +2,209 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 
-[System.Serializable]
-public class BalloonDifficulty
+
+namespace SobGameJam.MiniGames
 {
-    public string levelName = "Level 1";
-
-    [Header("Inflation")]
-    public float[] inflationSteps = { 0.05f, 0.10f, 0.15f };
-    public bool loopSteps = true;
-
-    [Header("Leak")]
-    public float leakRate = 0.2f;
-
-    [Header("Boundaries")]
-    public float maxScale = 2.5f;
-    public float minScale = 0.3f;
-
-    [Header("Win Condition")]
-    public float timeToSurvive = 10f;
-}
-
-public class BalloonGameManager : MonoBehaviour
-{
-    [Header("References")]
-    public Transform balloonTransform;
-
-    [Header("UI Elements")]
-    public TextMeshProUGUI nextPumpText;
-    public TextMeshProUGUI timerText;
-    public TextMeshProUGUI resultText;
-
-    [Header("Difficulty ")]
-    public BalloonDifficulty[] difficultyLevels;
-    public int currentDifficultyIndex = 0;
-
-    [Header("Explosion")]
-    public int particleCount = 10;
-
-    private bool isPlaying = false;
-    private float currentScale = 1f;
-    private int currentStepIndex = 0;
-    private float survivalTimer = 0f;
-
-    private BalloonDifficulty currentLevel;
-
-    void Start()
+    [System.Serializable]
+    public class BalloonDifficulty
     {
-        if (resultText != null) resultText.text = "";
+        public string levelName = "Level 1";
 
-        StartBalloonGame();
+        [Header("Inflation")]
+        public float[] inflationSteps = { 0.05f, 0.10f, 0.15f };
+        public bool loopSteps = true;
+
+        [Header("Leak")]
+        public float leakRate = 0.2f;
+
+        [Header("Boundaries")]
+        public float maxScale = 2.5f;
+        public float minScale = 0.3f;
+
+        [Header("Win Condition")]
+        public float timeToSurvive = 10f;
     }
 
-    public void StartBalloonGame()
+    public class BalloonGameManager : MiniGameBase
     {
-        currentLevel = difficultyLevels[currentDifficultyIndex];
+        [Header("References")]
+        public Transform balloonTransform;
 
-        currentScale = 1f;
-        balloonTransform.localScale = Vector3.one * currentScale;
-        currentStepIndex = 0;
-        survivalTimer = 0f;
+        [Header("UI Elements")]
+        public TextMeshProUGUI nextPumpText;
+        public TextMeshProUGUI timerText;
+        public TextMeshProUGUI resultText;
 
-        if (resultText != null) resultText.text = "";
-        isPlaying = true;
+        [Header("Difficulty ")]
+        public BalloonDifficulty[] difficultyLevels;
+        public int currentDifficultyIndex = 0;
 
-        UpdateUI();
-    }
+        [Header("Explosion")]
+        public int particleCount = 10;
 
-    void Update()
-    {
-        if (!isPlaying) return;
+        private float currentScale = 1f;
+        private int currentStepIndex = 0;
+        private float survivalTimer = 0f;
 
-        survivalTimer += Time.deltaTime;
+        private BalloonDifficulty currentLevel;
 
-        currentScale -= currentLevel.leakRate * Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        void Start()
         {
-            PumpBalloon();
+            if (resultText != null) resultText.text = "";
         }
 
-        balloonTransform.localScale = Vector3.one * currentScale;
-
-        UpdateUI();
-
-        if (survivalTimer >= currentLevel.timeToSurvive)
+        protected override void OnGameStarted(int roundNumber)
         {
-            WinGame();
-        }
-        else if (currentScale >= currentLevel.maxScale)
-        {
-            PlayExplosionEffect();
-            LoseGame("The balloon burst!");
-        }
-        else if (currentScale <= currentLevel.minScale)
-        {
-            balloonTransform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack);
-            LoseGame("The balloon shrunk!");
-        }
-    }
-
-    private void PumpBalloon()
-    {
-        float pumpAmount = currentLevel.inflationSteps[currentStepIndex];
-        currentScale += pumpAmount;
-
-        balloonTransform.DOKill();
-        balloonTransform.DOPunchScale(Vector3.one * (pumpAmount / 2f), 0.15f, 2, 1f);
-
-        currentStepIndex++;
-        if (currentStepIndex >= currentLevel.inflationSteps.Length)
-        {
-            currentStepIndex = currentLevel.loopSteps ? 0 : currentLevel.inflationSteps.Length - 1;
+            StartBalloonGame();
         }
 
-        if (nextPumpText != null)
+        public void StartBalloonGame()
         {
-            nextPumpText.transform.DOKill(true);
-            nextPumpText.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
-            nextPumpText.DOColor(Color.yellow, 0.1f).OnComplete(() => nextPumpText.DOColor(Color.white, 0.2f));
-        }
-    }
+            currentLevel = difficultyLevels[currentDifficultyIndex];
 
-    private void UpdateUI()
-    {
-        float timeLeft = Mathf.Max(0, currentLevel.timeToSurvive - survivalTimer);
+            currentScale = 1f;
+            balloonTransform.localScale = Vector3.one * currentScale;
+            currentStepIndex = 0;
+            survivalTimer = 0f;
 
-        if (timerText != null)
-        {
-            timerText.text = "Time Left: " + timeLeft.ToString("F1") + "s";
+            if (resultText != null) resultText.text = "";
+
+            UpdateUI();
         }
 
-        if (nextPumpText != null)
+        void Update()
         {
-            float nextPumpPercentage = currentLevel.inflationSteps[currentStepIndex] * 100f;
-            nextPumpText.text = "Next Pump: +" + nextPumpPercentage.ToString("F0") + "%";
-        }
-    }
+            if (!base.isGameActive) return;
 
-    private void PlayExplosionEffect()
-    {
-        balloonTransform.DOKill();
+            survivalTimer += Time.deltaTime;
 
-        SpriteRenderer sr = balloonTransform.GetComponent<SpriteRenderer>();
-        if (sr != null)
-        {
-            balloonTransform.DOScale(currentScale * 1.5f, 0.1f).SetEase(Ease.OutExpo);
+            currentScale -= currentLevel.leakRate * Time.deltaTime;
 
-            sr.DOColor(Color.white, 0.05f).OnComplete(() =>
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                sr.DOFade(0f, 0.1f);
-            });
+                PumpBalloon();
+            }
+
+            balloonTransform.localScale = Vector3.one * currentScale;
+
+            UpdateUI();
+
+            if (survivalTimer >= currentLevel.timeToSurvive)
+            {
+                WinMiniGame();
+            }
+            else if (currentScale >= currentLevel.maxScale)
+            {
+                PlayExplosionEffect();
+                LoseMiniGame("The balloon burst!");
+            }
+            else if (currentScale <= currentLevel.minScale)
+            {
+                balloonTransform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack);
+                LoseMiniGame("The balloon shrunk!");
+            }
         }
 
-        if (Camera.main != null)
+        private void PumpBalloon()
         {
-            Camera.main.transform.DOShakePosition(0.4f, 0.5f, 20, 90f);
+            float pumpAmount = currentLevel.inflationSteps[currentStepIndex];
+            currentScale += pumpAmount;
+
+            balloonTransform.DOKill();
+            balloonTransform.DOPunchScale(Vector3.one * (pumpAmount / 2f), 0.15f, 2, 1f);
+
+            currentStepIndex++;
+            if (currentStepIndex >= currentLevel.inflationSteps.Length)
+            {
+                currentStepIndex = currentLevel.loopSteps ? 0 : currentLevel.inflationSteps.Length - 1;
+            }
+
+            if (nextPumpText != null)
+            {
+                nextPumpText.transform.DOKill(true);
+                nextPumpText.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
+                nextPumpText.DOColor(Color.yellow, 0.1f).OnComplete(() => nextPumpText.DOColor(Color.white, 0.2f));
+            }
         }
 
-        CreateDOTweenParticles();
-    }
-
-    private void CreateDOTweenParticles()
-    {
-        SpriteRenderer originalSr = balloonTransform.GetComponent<SpriteRenderer>();
-        if (originalSr == null) return;
-
-        for (int i = 0; i < particleCount; i++)
+        private void UpdateUI()
         {
-            GameObject particle = new GameObject("PopParticle");
-            particle.transform.position = balloonTransform.position;
+            float timeLeft = Mathf.Max(0, currentLevel.timeToSurvive - survivalTimer);
 
-            SpriteRenderer sr = particle.AddComponent<SpriteRenderer>();
-            sr.sprite = originalSr.sprite;
-            sr.color = originalSr.color;
+            if (timerText != null)
+            {
+                timerText.text = "Time Left: " + timeLeft.ToString("F1") + "s";
+            }
 
-            particle.transform.localScale = Vector3.one * Random.Range(0.2f, 0.5f);
-
-            Vector2 randomDir = Random.insideUnitCircle.normalized * Random.Range(3f, 6f);
-            Vector3 targetPos = particle.transform.position + (Vector3)randomDir;
-
-            particle.transform.DOMove(targetPos, 0.4f).SetEase(Ease.OutCubic);
-            particle.transform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.InBack);
-            sr.DOFade(0, 0.4f).SetEase(Ease.InCubic);
-
-            Destroy(particle, 0.5f);
+            if (nextPumpText != null)
+            {
+                float nextPumpPercentage = currentLevel.inflationSteps[currentStepIndex] * 100f;
+                nextPumpText.text = "Next Pump: +" + nextPumpPercentage.ToString("F0") + "%";
+            }
         }
-    }
 
-    public void WinGame()
-    {
-        isPlaying = false;
-        if (resultText != null) resultText.text = "You Survived!";
-        Debug.Log("You have won! The balloon has been successfully kept at the critical point.");
-    }
+        private void PlayExplosionEffect()
+        {
+            balloonTransform.DOKill();
 
-    public void LoseGame(string reason)
-    {
-        isPlaying = false;
-        if (resultText != null) resultText.text = reason;
-        Debug.Log("You lost! The reason: " + reason);
+            SpriteRenderer sr = balloonTransform.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                balloonTransform.DOScale(currentScale * 1.5f, 0.1f).SetEase(Ease.OutExpo);
+
+                sr.DOColor(Color.white, 0.05f).OnComplete(() =>
+                {
+                    sr.DOFade(0f, 0.1f);
+                });
+            }
+
+            if (Camera.main != null)
+            {
+                Camera.main.transform.DOShakePosition(0.4f, 0.5f, 20, 90f);
+            }
+
+            CreateDOTweenParticles();
+        }
+
+        private void CreateDOTweenParticles()
+        {
+            SpriteRenderer originalSr = balloonTransform.GetComponent<SpriteRenderer>();
+            if (originalSr == null) return;
+
+            for (int i = 0; i < particleCount; i++)
+            {
+                GameObject particle = new GameObject("PopParticle");
+                particle.transform.position = balloonTransform.position;
+
+                SpriteRenderer sr = particle.AddComponent<SpriteRenderer>();
+                sr.sprite = originalSr.sprite;
+                sr.color = originalSr.color;
+
+                particle.transform.localScale = Vector3.one * Random.Range(0.2f, 0.5f);
+
+                Vector2 randomDir = Random.insideUnitCircle.normalized * Random.Range(3f, 6f);
+                Vector3 targetPos = particle.transform.position + (Vector3)randomDir;
+
+                particle.transform.DOMove(targetPos, 0.4f).SetEase(Ease.OutCubic);
+                particle.transform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.InBack);
+                sr.DOFade(0, 0.4f).SetEase(Ease.InCubic);
+
+                Destroy(particle, 0.5f);
+            }
+        }
+
+        public void WinMiniGame()
+        {
+            if (resultText != null) resultText.text = "You Survived!";
+            Debug.Log("You have won! The balloon has been successfully kept at the critical point.");
+            WinGame(); // This will trigger the WonEvent in MiniGameBase
+        }
+
+        public void LoseMiniGame(string reason)
+        {
+            if (resultText != null) resultText.text = reason;
+            Debug.Log("You lost! The reason: " + reason);
+            LoseGame(); // This will trigger the LostEvent in MiniGameBase
+        }
     }
 }

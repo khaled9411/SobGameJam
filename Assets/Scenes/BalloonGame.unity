@@ -376,6 +376,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f9c3161310ce7041af0f60c73590a14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonGameManager
+  onRoundStartedEvent: {fileID: 11400000, guid: 1d214e0f5c3bd3840ae8dbe3be1cd35f, type: 2}
+  miniGameWonEvent: {fileID: 11400000, guid: 9c1cbfdc88fd53a4db8ddb498fd6bed7, type: 2}
+  miniGameLostEvent: {fileID: 11400000, guid: 74468a8914c5f184bb9cc4f604aafa0d, type: 2}
   balloonTransform: {fileID: 1540605789}
   nextPumpText: {fileID: 1876030530}
   timerText: {fileID: 1104171798}
