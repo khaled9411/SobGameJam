@@ -23,7 +23,6 @@ namespace SobGameJam.MiniGames
         [SerializeField] private float phaseTwoDuration = 20f;
         [SerializeField] private int safeMin = 60;
         [SerializeField] private int safeMax = 70;
-        [SerializeField] private int testingRoundNumber;
         [SerializeField] private GameObject indicator;
         [SerializeField] private GameObject tutorialPanel;
 
@@ -32,10 +31,7 @@ namespace SobGameJam.MiniGames
         private float currentScore = 0;
 
 
-        private void Start()  //for testing, remove once finished
-        {
-            OnGameStarted(testingRoundNumber); 
-        }
+
         protected override void OnGameStarted(int roundNumber)
         {
             Debug.Log($"Round {roundNumber} started!");
