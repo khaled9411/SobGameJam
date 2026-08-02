@@ -12,7 +12,6 @@ public class WireVisual : MonoBehaviour
         { WireColor.Blue, Color.blue },
         { WireColor.Yellow, Color.yellow },
         { WireColor.Green, Color.green },
-        { WireColor.White, Color.white },
     };
 
     public void SetColor(WireColor color)
@@ -20,9 +19,16 @@ public class WireVisual : MonoBehaviour
         CurrentColor = color;
         wireRenderer.color = ColorMap[color];
     }
-
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Mouse button down detected, at least Input is registering.");
+        }
+    }
     private void OnMouseDown()
     {
+        Debug.Log($"[WireVisual] OnMouseDown fired on {gameObject.name}");
         FindObjectOfType<WireCutController>().OnWireCut(CurrentColor);
     }
 }

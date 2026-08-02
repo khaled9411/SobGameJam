@@ -4,7 +4,7 @@ using SobGameJam.MiniGames;
 
 namespace SobGameJam.MiniGames.WireCut
 {
-    public enum WireColor { Red, Blue, Yellow, Green, White }
+    public enum WireColor { Red, Blue, Yellow, Green }
 
     [CreateAssetMenu(menuName = "MiniGames/WireCut/Clue")]
     public class WireClueSO : ScriptableObject

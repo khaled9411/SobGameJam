@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9c9de9978f265459be332d313e0d17, type: 3}
   m_Name: Clue 2
   m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.MiniGames.WireCut.WireClueSO
-  clueText: The Color of nature
+  clueText: Grass is...
   answerColor: 3
   difficultyTier: 1

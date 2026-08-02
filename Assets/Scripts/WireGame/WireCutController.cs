@@ -21,11 +21,11 @@ namespace SobGameJam.MiniGames.WireCut
         [Header("Timer Difficulty Curve")]
         [SerializeField] private float startingTimeLimit = 8f;
         [SerializeField] private float timeReductionPerRound = 0.4f;
-        [SerializeField] private float minimumTimeLimit = 3f;
+        [SerializeField] private float minimumTimeLimit = 4f;
 
         [Header("UI")]
         [SerializeField] private TMPro.TextMeshProUGUI clueText;
-        [SerializeField] private UnityEngine.UI.Image timerFillImage;
+        [SerializeField] private UnityEngine.UI.Image timerFillImage; //should I make it a bar??
 
         private WireClueSO activeClue;
         private float timer;
@@ -85,7 +85,7 @@ namespace SobGameJam.MiniGames.WireCut
 
         private void AssignColorsToWires(WireColor correctColor)
         {
-            List<WireColor> allColors = new List<WireColor> { WireColor.Red, WireColor.Blue, WireColor.Yellow, WireColor.Green, WireColor.White };
+            List<WireColor> allColors = new List<WireColor> { WireColor.Red, WireColor.Blue, WireColor.Yellow, WireColor.Green };
             allColors.Remove(correctColor);
 
             List<WireColor> chosen = new List<WireColor> { correctColor };
