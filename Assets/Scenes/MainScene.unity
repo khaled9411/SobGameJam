@@ -287,7 +287,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.Core.GameManager
   startingLives: 4
   availableMiniGames:
-  - {fileID: 11400000, guid: 7b8a82a28da8da9479f9966a8f78db1f, type: 2}
+  - {fileID: 11400000, guid: 5ee5225238cb35d438eea7cb96f65ac7, type: 2}
+  - {fileID: 11400000, guid: ad8792729be9255419a332ca2a4b8a77, type: 2}
+  - {fileID: 11400000, guid: b9891d9f50d100f489add7b2da26ada9, type: 2}
+  - {fileID: 11400000, guid: 77a31ea072b8d4d43a11014c45693024, type: 2}
+  - {fileID: 11400000, guid: 2f3be5477cd88d44b9aea3592d0738e5, type: 2}
   miniGameWonEvent: {fileID: 11400000, guid: 9c1cbfdc88fd53a4db8ddb498fd6bed7, type: 2}
   miniGameLostEvent: {fileID: 11400000, guid: 74468a8914c5f184bb9cc4f604aafa0d, type: 2}
   onRoundStartedEvent: {fileID: 11400000, guid: 1d214e0f5c3bd3840ae8dbe3be1cd35f, type: 2}
