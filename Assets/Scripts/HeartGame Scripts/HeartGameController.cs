@@ -44,6 +44,7 @@ namespace SobGameJam.MiniGames
             scoreBar.maxValue = maxScore;
             scoreBar.value = currentScore;
 
+            spawner.OnOutOfCircles += HandleOutOfCircles;
             spawner.OnReachedPerfectZone += StartTutorial;
             spawner.OnPerfectTiming += HandlePerfect;
             spawner.OnBadTiming += HandleBadTiming;
@@ -54,6 +55,7 @@ namespace SobGameJam.MiniGames
         }
         private void OnDestroy()
         {
+            spawner.OnOutOfCircles -= HandleOutOfCircles;
             spawner.OnPerfectTiming -= HandlePerfect;
             spawner.OnBadTiming -= HandleBadTiming;
             spawner.OnMissed -= HandleMissed;
@@ -127,6 +129,13 @@ namespace SobGameJam.MiniGames
         {
             scoreBar.value = currentScore;
             //Add VFX here
+        }
+
+        private void HandleOutOfCircles()
+        {
+            if (!isPhaseTwo)
+                LoseGame();
+            Debug.Log("Game Lost");
         }
         private void StartPhaseTwo()
         {

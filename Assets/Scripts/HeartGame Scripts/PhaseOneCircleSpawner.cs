@@ -8,7 +8,7 @@ public class PhaseOneCircleSpawner : MonoBehaviour
     public event System.Action OnBadTiming;
     public event System.Action OnMissed;
     public event System.Action OnReachedPerfectZone;
-
+    public event System.Action OnOutOfCircles;
     [SerializeField] private GrowingCircle circlePrefab;
     [SerializeField] private Transform parent;
     [SerializeField] private Vector2 minBounds = new Vector2(-7f, -3.5f);
@@ -17,6 +17,9 @@ public class PhaseOneCircleSpawner : MonoBehaviour
     [SerializeField] private float maxGrowSpeed = 2.5f;
 
     private float currentGrowSpeed;
+    private int circlesSpawned;
+    private int maxCircles = 30;
+
 
     public void StartSpawning()
     {
@@ -38,6 +41,12 @@ public class PhaseOneCircleSpawner : MonoBehaviour
 
             GrowingCircle circle =  Instantiate(circlePrefab, spawnPosition, Quaternion.identity, parent);
             circle.SetGrowSpeed(currentGrowSpeed);
+            circlesSpawned++;
+            if (circlesSpawned >= maxCircles)
+            {
+                OnOutOfCircles?.Invoke();
+                yield break;
+            }
             circle.OnPerfectTiming += () => OnPerfectTiming?.Invoke();
             circle.OnBadTiming += () => OnBadTiming?.Invoke();
             circle.OnMissed += () => OnMissed?.Invoke();

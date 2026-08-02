@@ -1115,7 +1115,7 @@ MonoBehaviour:
   minBounds: {x: -7, y: -3.5}
   maxBounds: {x: 7, y: 5}
   baseGrowSpeed: 1.2
-  maxGrowSpeed: 2.2
+  maxGrowSpeed: 2
 --- !u!4 &1508091922
 Transform:
   m_ObjectHideFlags: 0

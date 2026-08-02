@@ -14,7 +14,7 @@ public class GrowingCircle : MonoBehaviour
     [SerializeField] private float growSpeed;
     [SerializeField] float maxSize = 1.5f;
     [SerializeField] float minPerfectSize = 1f;
-    [SerializeField] float maxPerfectSize = 1.3f;
+    [SerializeField] float maxPerfectSize = 1.35f;
     [SerializeField] private Color perfectColor = Color.yellow;
 
 
