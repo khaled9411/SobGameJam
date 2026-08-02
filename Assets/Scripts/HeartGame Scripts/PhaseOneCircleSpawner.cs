@@ -7,6 +7,7 @@ public class PhaseOneCircleSpawner : MonoBehaviour
     public event System.Action OnPerfectTiming;
     public event System.Action OnBadTiming;
     public event System.Action OnMissed;
+    public event System.Action OnReachedPerfectZone;
 
     [SerializeField] private GrowingCircle circlePrefab;
     [SerializeField] private Transform parent;
@@ -40,6 +41,7 @@ public class PhaseOneCircleSpawner : MonoBehaviour
             circle.OnPerfectTiming += () => OnPerfectTiming?.Invoke();
             circle.OnBadTiming += () => OnBadTiming?.Invoke();
             circle.OnMissed += () => OnMissed?.Invoke();
+            circle.OnReachedPerfectZone += () => OnReachedPerfectZone?.Invoke();
 
             while (circle != null)
             {
