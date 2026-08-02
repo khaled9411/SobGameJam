@@ -9,8 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/WireGame.unity
-    guid: 80fe0acd76a88d84d9ffd46c2c87aaf3
+    path: Assets/Scenes/BalloonGame.unity
+    guid: 59b0695cebd62a547990bcc38ff0523b
+  - enabled: 1
+    path: Assets/Scenes/NuclearReactor.unity
+    guid: 867a042fce2c3544f8178cf2671e8531
+  - enabled: 1
+    path: Assets/Scenes/ExampleMiniGame.unity
+    guid: 03ab5ee99df23bb4e8c274dc34a23670
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

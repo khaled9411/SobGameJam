@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using SobGameJam.Events;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace SobGameJam.Core
 {
@@ -16,6 +17,7 @@ namespace SobGameJam.Core
         [SerializeField] private int startingLives = 4;
         private int currentLives;
         private int currentRound = 1;
+        private int score = 0;
 
         [Header("Mini-Game Database")]
         [SerializeField] private List<MiniGameData> availableMiniGames;
@@ -54,6 +56,7 @@ namespace SobGameJam.Core
         private void HandleMiniGameWon()
         {
             if (isTransitioning) return;
+            score++;
             StartCoroutine(TransitionToNextGameRoutine(true));
         }
 
@@ -77,7 +80,7 @@ namespace SobGameJam.Core
             // 2. Check for Game Over
             if (currentLives <= 0)
             {
-                Debug.Log("GAME OVER! Final round: " + currentRound);
+                Debug.Log("GAME OVER! Final Score: " + score);
                 // Handle Game Over (e.g., load main menu or game over screen)
                 yield break;
             }
