@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "ChargerGameInput",
+    "maps": [
+        {
+            "name": "ChargerGame",
+            "id": "5e810da9-0325-4dc3-854a-f83bed73fd27",
+            "actions": [
+                {
+                    "name": "Mouse Move",
+                    "type": "Value",
+                    "id": "8a9fae56-c99c-4c28-9903-3d8ecb578527",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "906933de-6c44-4204-bd0b-19c1b92d1bc1",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

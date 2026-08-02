@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -287,7 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.Core.GameManager
   startingLives: 4
   availableMiniGames:
-  - {fileID: 11400000, guid: 77a31ea072b8d4d43a11014c45693024, type: 2}
+  - {fileID: 11400000, guid: 7b8a82a28da8da9479f9966a8f78db1f, type: 2}
   miniGameWonEvent: {fileID: 11400000, guid: 9c1cbfdc88fd53a4db8ddb498fd6bed7, type: 2}
   miniGameLostEvent: {fileID: 11400000, guid: 74468a8914c5f184bb9cc4f604aafa0d, type: 2}
   onRoundStartedEvent: {fileID: 11400000, guid: 1d214e0f5c3bd3840ae8dbe3be1cd35f, type: 2}
