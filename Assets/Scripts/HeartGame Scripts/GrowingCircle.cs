@@ -6,6 +6,8 @@ public class GrowingCircle : MonoBehaviour
     public event Action OnPerfectTiming;
     public event Action OnBadTiming;
     public event Action OnMissed;
+    public event Action OnReachedPerfectZone;
+
 
 
     [SerializeField] private float startingScale = 0f;
@@ -15,8 +17,11 @@ public class GrowingCircle : MonoBehaviour
     [SerializeField] float maxPerfectSize = 1.3f;
     [SerializeField] private Color perfectColor = Color.yellow;
 
+
     private float currentScale;
     private bool resolved;
+    private bool enteredPerfectZone;
+ 
 
     private SpriteRenderer spriteRenderer;
 
@@ -29,6 +34,12 @@ public class GrowingCircle : MonoBehaviour
 
     private void Update()
     {
+        if (!enteredPerfectZone && IsPerfectSize())
+        {
+            enteredPerfectZone = true;
+            OnReachedPerfectZone?.Invoke();
+        }
+
         Grow(); //Grow circle
 
         if (!resolved && currentScale >= maxSize)
@@ -85,4 +96,5 @@ public class GrowingCircle : MonoBehaviour
     {
         growSpeed = speed;
     }
+
 }
