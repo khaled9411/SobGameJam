@@ -17,6 +17,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ExampleMiniGame.unity
     guid: 03ab5ee99df23bb4e8c274dc34a23670
+  - enabled: 1
+    path: Assets/Scenes/WireGame.unity
+    guid: 80fe0acd76a88d84d9ffd46c2c87aaf3
+  - enabled: 1
+    path: Assets/Scenes/Menna's scene.unity
+    guid: 1c14e5e0a3fb6ca4f8ca0d1aae290b0a
+  - enabled: 1
+    path: Assets/Scenes/ChargerGame.unity
+    guid: ecc27ee4e58449b4b90dccc14f3e3f72
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
