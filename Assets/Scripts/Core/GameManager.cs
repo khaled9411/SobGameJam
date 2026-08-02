@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using SobGameJam.Events;
-using UnityEngine.SocialPlatforms.Impl;
 
 namespace SobGameJam.Core
 {
@@ -17,7 +16,6 @@ namespace SobGameJam.Core
         [SerializeField] private int startingLives = 4;
         private int currentLives;
         private int currentRound = 1;
-        private int score = 0;
 
         [Header("Mini-Game Database")]
         [SerializeField] private List<MiniGameData> availableMiniGames;
@@ -28,17 +26,20 @@ namespace SobGameJam.Core
 
         [Header("Events (Broadcasting)")]
         [SerializeField] private IntEventChannelSO onRoundStartedEvent; // Sends round number to the mini-game
-        
+        [SerializeField] private IntEventChannelSO onLivesChangedEvent; // Sends current lives count whenever it changes
+        [SerializeField] private IntEventChannelSO onGameOverEvent;     // Sends final round number when the run ends
+
         private MiniGameData currentMiniGame;
         private bool isTransitioning = false;
 
+        // NOTE: Start() no longer auto-begins a run. GameManager now sits idle until
+        // UIManager calls BeginNewRun() (wired to the Main Menu's Start button).
+        // This lets the Main Menu screen actually appear first, with nothing loading
+        // behind it, instead of mini-game loading racing ahead in the background
+        // while the player is still looking at the menu.
         private void Start()
         {
-            currentLives = startingLives;
-            currentRound = 1;
-
-            // Start the first game
-            StartCoroutine(LoadNextMiniGameRoutine());
+            // Intentionally empty. Waiting for UIManager to call BeginNewRun().
         }
 
         private void OnEnable()
@@ -53,35 +54,93 @@ namespace SobGameJam.Core
             if (miniGameLostEvent != null) miniGameLostEvent.OnEventRaised -= HandleMiniGameLost;
         }
 
+        /// <summary>
+        /// Resets runtime state (lives, round) and starts loading the first mini-game.
+        /// PUBLIC so UIManager can call this directly when the player presses Start
+        /// on the Main Menu, and again on Restart from the Game Over screen.
+        /// Does NOT touch high score — that lives entirely in UIManager via PlayerPrefs.
+        /// </summary>
+        public void BeginNewRun()
+        {
+            currentLives = startingLives;
+            currentRound = 1;
+            isTransitioning = false;
+
+            // Broadcast starting lives immediately so any UI already active
+            // (Gameplay HUD) is in sync from frame one.
+            if (onLivesChangedEvent != null) onLivesChangedEvent.RaiseEvent(currentLives);
+
+            StartCoroutine(LoadNextMiniGameRoutine());
+        }
+
+        /// <summary>
+        /// Public entry point for a Restart button. Call this from UIManager.
+        /// Handles unloading whatever mini-game scene is currently active before
+        /// starting a fresh run, so we don't leak an old additive scene.
+        /// </summary>
+        public void RestartGame()
+        {
+            StopAllCoroutines(); // safety: cancel any in-flight transition before restarting
+            StartCoroutine(RestartRoutine());
+        }
+
+        private IEnumerator RestartRoutine()
+        {
+            if (currentMiniGame != null)
+            {
+                AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(currentMiniGame.sceneName);
+                if (asyncUnload != null)
+                {
+                    while (!asyncUnload.isDone)
+                    {
+                        yield return null;
+                    }
+                }
+                currentMiniGame = null;
+            }
+
+            BeginNewRun();
+        }
+
         private void HandleMiniGameWon()
         {
             if (isTransitioning) return;
-            score++;
+            isTransitioning = true; // set synchronously here, not inside the coroutine,
+                                    // so a second event firing in the same frame can't slip past this check
             StartCoroutine(TransitionToNextGameRoutine(true));
         }
 
         private void HandleMiniGameLost()
         {
             if (isTransitioning) return;
+            isTransitioning = true; // same reasoning as above
             currentLives--;
+
+            // Broadcast the updated lives count right where it changes,
+            // so this is the single source of truth UI can never desync from.
+            if (onLivesChangedEvent != null) onLivesChangedEvent.RaiseEvent(currentLives);
+
             StartCoroutine(TransitionToNextGameRoutine(false));
         }
 
         private IEnumerator TransitionToNextGameRoutine(bool wasWin)
         {
-            isTransitioning = true;
-
             // 1. Show Win/Loss UI/Animation (This would tie into a UIManager)
             Debug.Log(wasWin ? "Mini-Game WON!" : "Mini-Game LOST!");
-            
+
             // Short delay for the result to read
             yield return new WaitForSeconds(1.5f);
 
             // 2. Check for Game Over
             if (currentLives <= 0)
             {
-                Debug.Log("GAME OVER! Final Score: " + score);
-                // Handle Game Over (e.g., load main menu or game over screen)
+                Debug.Log("GAME OVER! Final round: " + currentRound);
+
+                // Broadcast game over with the final round number reached.
+                // UIManager listens for this to show the Game Over screen.
+                if (onGameOverEvent != null) onGameOverEvent.RaiseEvent(currentRound);
+
+                isTransitioning = false;
                 yield break;
             }
 
