@@ -1075,8 +1075,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   currentDifficultyIndex: 0
   nodePrefab: {fileID: 2994281856211677281, guid: d985200b55b69924787d7d248cd5f261, type: 3}
-  spawnAreaMin: {x: 9, y: -4}
-  spawnAreaMax: {x: -9, y: 6}
+  spawnAreaMin: {x: 7, y: -4}
+  spawnAreaMax: {x: -7, y: 4}
   reactorHandles:
   - {fileID: 1474997396}
   - {fileID: 917645081}

@@ -52,6 +52,10 @@ namespace SobGameJam.UI
         [SerializeField] private MiniGameEventChannelSO OnMiniGamechooseEvent;
         [SerializeField] private VoidEventChannelSO OnInstructionTimeEnd;
 
+        [Header("Audio Settings")]
+        [SerializeField] private AudioSource uiAudioSource;
+        [SerializeField] private AudioClip appearSound;
+
         private const string HighScoreKey = "HighScore";
         private int _currentLives = -1;
 
@@ -77,6 +81,14 @@ namespace SobGameJam.UI
         {
             ShowMainMenu();
             StartLogoFloatingAnimation();
+        }
+
+        private void PlayAppearSound()
+        {
+            if (uiAudioSource != null && appearSound != null)
+            {
+                uiAudioSource.PlayOneShot(appearSound);
+            }
         }
 
         private void StartLogoFloatingAnimation()
@@ -152,7 +164,7 @@ namespace SobGameJam.UI
                 {
                     btn.localScale = Vector3.zero;
 
-                    mainMenuIntroSequence.Append(btn.DOScale(Vector3.one, 0.4f).SetEase(Ease.OutBack));
+                    mainMenuIntroSequence.Append(btn.DOScale(Vector3.one, 0.4f).SetEase(Ease.OutBack).OnStart(PlayAppearSound));
                 }
             }
         }
@@ -184,11 +196,9 @@ namespace SobGameJam.UI
             gameSprite.transform.localScale = Vector3.zero;
             gameInstruction.transform.localScale = Vector3.zero;
 
-            instructionSequence.Append(gameTitle.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack));
-
-            instructionSequence.Join(gameSprite.transform.DOScale(Vector3.one, 0.35f).SetEase(Ease.OutBack).SetDelay(0.1f));
-
-            instructionSequence.Join(gameInstruction.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).SetDelay(0.2f));
+            instructionSequence.Append(gameTitle.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).OnStart(PlayAppearSound));
+            instructionSequence.Join(gameSprite.transform.DOScale(Vector3.one, 0.35f).SetEase(Ease.OutBack).SetDelay(0.1f).OnStart(PlayAppearSound));
+            instructionSequence.Join(gameInstruction.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).SetDelay(0.2f).OnStart(PlayAppearSound));
 
             instructionSequence.Join(gameSprite.transform.DOPunchRotation(new Vector3(0, 0, 15f), 0.4f, 5, 0.5f).SetDelay(0.15f));
         }
@@ -207,6 +217,7 @@ namespace SobGameJam.UI
                 InstructionScreen.SetActive(false);
             });
         }
+
         private void HandleLivesChanged(int newLives)
         {
             bool didLoseLife = _currentLives != -1 && newLives < _currentLives;
@@ -249,13 +260,9 @@ namespace SobGameJam.UI
             Sequence lossSeq = DOTween.Sequence();
 
             lossSeq.Append(rect.DOScale(Vector3.one * 1.6f, 0.15f).SetEase(Ease.OutBack));
-
             lossSeq.Join(dimmedHeartOverlay.DOColor(Color.red, 0.15f));
-
             lossSeq.Join(rect.DOShakeRotation(0.3f, new Vector3(0, 0, 45f), 12, 90f));
-
             lossSeq.Append(rect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBounce));
-
             lossSeq.Join(dimmedHeartOverlay.DOColor(Color.white, 0.3f));
 
             if (rect.parent != null)
@@ -264,6 +271,7 @@ namespace SobGameJam.UI
                 rect.parent.DOShakePosition(0.3f, new Vector3(15f, 0, 0), 25, 90f, false, true);
             }
         }
+
         private void HandleRoundStarted(int roundNumber)
         {
             if (roundNumberText != null) roundNumberText.Text = "الجولة: " + roundNumber;
@@ -305,7 +313,7 @@ namespace SobGameJam.UI
 
             if (gameOverLogo != null)
             {
-                gameOverSequence.Append(gameOverLogo.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBounce));
+                gameOverSequence.Append(gameOverLogo.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBounce).OnStart(PlayAppearSound));
                 gameOverSequence.Join(gameOverLogo.DOPunchRotation(new Vector3(0, 0, 8f), 0.5f, 6, 0.5f));
             }
 
@@ -313,16 +321,17 @@ namespace SobGameJam.UI
             {
                 foreach (var btn in gameOverButtons)
                 {
-                    gameOverSequence.Append(btn.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutBack));
+                    gameOverSequence.Append(btn.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutBack).OnStart(PlayAppearSound));
                 }
             }
 
             if (finalRoundText != null)
-                gameOverSequence.Join(finalRoundText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack));
+                gameOverSequence.Join(finalRoundText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).OnStart(PlayAppearSound));
 
             if (highScoreText != null)
-                gameOverSequence.Join(highScoreText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).SetDelay(0.1f));
+                gameOverSequence.Join(highScoreText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).SetDelay(0.1f).OnStart(PlayAppearSound));
         }
+
         private void HandleGameOver(int finalRound)
         {
             gameplayHUD.SetActive(false);
@@ -362,6 +371,7 @@ namespace SobGameJam.UI
                 ShowMainMenu();
             });
         }
+
         public void OnGameOverExitPressed()
         {
             OnExitButtonPressed();
