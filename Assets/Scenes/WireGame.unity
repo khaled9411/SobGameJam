@@ -317,7 +317,7 @@ MonoBehaviour:
   onWireCutCorrectEvent: {fileID: 11400000, guid: 797e5be59777ad348a9cce353df580a6, type: 2}
   onWireCutWrongEvent: {fileID: 11400000, guid: 4648a586e70d49f41ad07317653be4e5, type: 2}
   onTimerTickEvent: {fileID: 11400000, guid: dfcae38b2d5e8f144b19bdfcd259ac16, type: 2}
-  OnGameStart: {fileID: 0}
+  OnGameStart: {fileID: 11400000, guid: a0a56a3a103364c49a04b27e2bba857b, type: 2}
 --- !u!4 &98985182
 Transform:
   m_ObjectHideFlags: 0
@@ -1326,7 +1326,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1981822930}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e06160c8fbef2c44ba3364a2c0856eae, type: 3}
   m_Name: 
