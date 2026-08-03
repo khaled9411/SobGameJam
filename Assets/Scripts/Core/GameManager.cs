@@ -30,6 +30,7 @@ namespace SobGameJam.Core
         [SerializeField] private IntEventChannelSO onGameOverEvent;     // Sends final round number when the run ends
 
         private MiniGameData currentMiniGame;
+        private int lastMiniGameIndex = -1;
         private bool isTransitioning = false;
 
         // NOTE: Start() no longer auto-begins a run. GameManager now sits idle until
@@ -168,9 +169,13 @@ namespace SobGameJam.Core
                 Debug.LogError("No MiniGames assigned to GameManager!");
                 yield break;
             }
+            int randomIndex;
+            do {
+                // Pick a random game (could add logic here to not repeat the last game)
+                randomIndex = Random.Range(0, availableMiniGames.Count);
+            } while (lastMiniGameIndex == randomIndex);
+            lastMiniGameIndex = randomIndex;
 
-            // Pick a random game (could add logic here to not repeat the last game)
-            int randomIndex = Random.Range(0, availableMiniGames.Count);
             currentMiniGame = availableMiniGames[randomIndex];
 
             // Load scene additively

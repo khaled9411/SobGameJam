@@ -21,8 +21,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 1
-      value: 10
+      time: 0.7733781
+      value: 19.962309
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -30,17 +30,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 10
-      value: 5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 20
-      value: 3
+      time: 19.941475
+      value: 9.983837
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -50,13 +41,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  pathWidth: 1
   plugSizeCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.6484524
-      value: 0.100275666
+      time: 0.089748025
+      value: 0.29867044
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -85,6 +75,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   wallPrefab: {fileID: 7559299209464688085, guid: 0a98bbdcaa307fc4d8fdfbdf5d853d2e, type: 3}
-  floorPrefab: {fileID: 0}
+  floorPrefab: {fileID: 8031425921404434713, guid: 677c068f0658cf94fb7f4d9c8db29bfc, type: 3}
   plugPrefab: {fileID: 5740530303079225279, guid: 69511ba62ca5d714ea44e4a6d33a4cc7, type: 3}
+  indicatorPrefab: {fileID: 6245762909502544713, guid: fc1320ef0b58fe644b952a185f4ef5f0, type: 3}
   socketPrefab: {fileID: 5635377831831726419, guid: 2267e60189b57eb4e9b5b5ebaf576220, type: 3}
