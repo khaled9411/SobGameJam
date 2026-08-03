@@ -5,10 +5,6 @@ namespace SobGameJam.MiniGames.ChargerGame
 {
     public class ChargerGameController : MiniGameBase
     {
-        [Header("testing")]
-        [SerializeField] bool isTesting = false;
-        [SerializeField] int roundnumber = 1;
-
 
         [Header("Game Configuration")]
         [SerializeField] private ChargerGameDataSO gameData;
@@ -30,15 +26,7 @@ namespace SobGameJam.MiniGames.ChargerGame
         private Vector3 originalCameraPosition;
         private float originalCameraSize;
         private bool hasSavedCameraState = false;
-#if UNITY_EDITOR
-        private void Start()
-        {
-            if (isTesting)
-            {
-                OnGameStarted(roundnumber);
-            }
-        }
-#endif
+
         protected override void OnGameStarted(int roundNumber)
         {
             if (gameData == null)
@@ -115,6 +103,11 @@ namespace SobGameJam.MiniGames.ChargerGame
             else
             {
                 Debug.LogError("ChargerGameController: Plug prefab is not assigned in game data!");
+            }
+            // Spawn indicator
+            if(gameData.indicatorPrefab != null)
+            {
+                GameObject plugObj = Instantiate(gameData.indicatorPrefab, mazeGenerator.startPosition, Quaternion.identity, transform);
             }
 
             // Spawn Socket (Goal)

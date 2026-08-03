@@ -51,13 +51,16 @@ namespace SobGameJam.MiniGames.ChargerGame
             Stack<Vector2Int> stack = new Stack<Vector2Int>();
             stack.Push(new Vector2Int(startX, startY));
 
-            int maxDistance = 0;
+            int effectiveGridWidth = gridWidth > 3 ? gridWidth - 2 : gridWidth;
+
+            int maxX = 0;
+            int maxDistanceAtMaxX = 0;
             Vector2Int endCell = new Vector2Int(startX, startY);
 
             while (stack.Count > 0)
             {
                 Vector2Int current = stack.Peek();
-                List<Vector2Int> unvisitedNeighbors = GetUnvisitedNeighbors(current.x, current.y, maze, gridWidth, gridHeight);
+                List<Vector2Int> unvisitedNeighbors = GetUnvisitedNeighbors(current.x, current.y, maze, effectiveGridWidth, gridHeight);
 
                 if (unvisitedNeighbors.Count > 0)
                 {
@@ -69,9 +72,15 @@ namespace SobGameJam.MiniGames.ChargerGame
 
                     stack.Push(next);
 
-                    if (stack.Count > maxDistance)
+                    if (next.x > maxX)
                     {
-                        maxDistance = stack.Count;
+                        maxX = next.x;
+                        maxDistanceAtMaxX = stack.Count;
+                        endCell = next;
+                    }
+                    else if (next.x == maxX && stack.Count > maxDistanceAtMaxX)
+                    {
+                        maxDistanceAtMaxX = stack.Count;
                         endCell = next;
                     }
                 }
@@ -79,6 +88,14 @@ namespace SobGameJam.MiniGames.ChargerGame
                 {
                     stack.Pop();
                 }
+            }
+
+            // Manually extend the end cell to the right edge to make it the ONLY path there
+            if (gridWidth > 3)
+            {
+                maze[endCell.x + 1, endCell.y] = 0;
+                maze[endCell.x + 2, endCell.y] = 0;
+                endCell = new Vector2Int(endCell.x + 2, endCell.y);
             }
 
             // Instantiate maze geometry

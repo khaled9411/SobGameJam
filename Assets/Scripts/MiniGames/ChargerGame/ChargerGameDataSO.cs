@@ -47,6 +47,9 @@ namespace SobGameJam.MiniGames.ChargerGame
         
         [Tooltip("Prefab for the Charger Plug player character.")]
         public GameObject plugPrefab;
+
+        [Tooltip("Prefab for the indicator for the start pos of the plub.")]
+        public GameObject indicatorPrefab;
         
         [Tooltip("Prefab for the Target Socket.")]
         public GameObject socketPrefab;
