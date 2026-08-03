@@ -41,7 +41,7 @@ public class GrowingCircle : MonoBehaviour
         {
             resolved = true;
             OnMissed?.Invoke();
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
 
         UpdateColour(); //change colour at perfect size
@@ -57,11 +57,18 @@ public class GrowingCircle : MonoBehaviour
         resolved = true;
 
         if (IsPerfectSize())
+        {
             OnPerfectTiming?.Invoke();
-        else
-            OnBadTiming?.Invoke();
+            Debug.Log("Perfect fired");
 
-        Destroy(gameObject);
+        }
+        else
+        {
+            OnBadTiming?.Invoke();
+            Debug.Log("Bad fired");
+        }
+
+        Destroy(transform.parent.gameObject);
     }
 
     private void Grow()

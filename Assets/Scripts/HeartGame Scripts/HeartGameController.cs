@@ -48,6 +48,7 @@ namespace SobGameJam.MiniGames
             scoreBar.maxValue = maxScore;
             scoreBar.value = currentScore;
 
+            Debug.Log("Subscribing to events");
             spawner.OnOutOfCircles += HandleOutOfCircles;
             spawner.OnPerfectTiming += HandlePerfect;
             spawner.OnBadTiming += HandleBadTiming;
@@ -95,6 +96,7 @@ namespace SobGameJam.MiniGames
 
         private void HandlePerfect()
         {
+            Debug.Log("Controller received perfect");
             AddScore(perfectPoints);
         }
         private void StaticPressed()
