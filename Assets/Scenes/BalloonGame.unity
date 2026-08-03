@@ -457,10 +457,10 @@ AudioSource:
   m_GameObject: {fileID: 101402190}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: d6529c3ff7d83f64e85ca874db2c57dc, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -1463,10 +1463,10 @@ AudioSource:
   m_GameObject: {fileID: 1015818649}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: d6529c3ff7d83f64e85ca874db2c57dc, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -3029,6 +3029,14 @@ PrefabInstance:
       propertyPath: response.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 8300000, guid: 4bcf02c046dfced4687aa5f42534ea16, type: 3}
+    - target: {fileID: 5631324255511089734, guid: c56fd073db3706b4aaae6b0f004dbc4b, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5631324255511089734, guid: c56fd073db3706b4aaae6b0f004dbc4b, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: d6529c3ff7d83f64e85ca874db2c57dc, type: 2}
     - target: {fileID: 6462041750987291269, guid: c56fd073db3706b4aaae6b0f004dbc4b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

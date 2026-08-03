@@ -252,7 +252,6 @@ namespace SobGameJam.MiniGames
 
             // End active input processing immediately
             activeNodes.Clear();
-            base.isGameActive = false;
 
             StopIdleAnimation();
             foreach (var handle in reactorHandles) handle.DOKill();
