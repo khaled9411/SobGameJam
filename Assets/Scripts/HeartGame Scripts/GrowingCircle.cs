@@ -13,9 +13,10 @@ public class GrowingCircle : MonoBehaviour
     [SerializeField] private float startingScale = 0f;
     [SerializeField] private float growSpeed;
     [SerializeField] float maxSize = 1.5f;
-    [SerializeField] float minPerfectSize = 1.45f;
+    [SerializeField] float minPerfectSize = 1.24f;
     [SerializeField] float maxPerfectSize = 1.5f;
-    [SerializeField] private Color perfectColor = Color.yellow;
+    [SerializeField] private Color perfectColor;
+    [SerializeField] private Color normalColor;
 
 
     private float currentScale;
@@ -81,12 +82,14 @@ public class GrowingCircle : MonoBehaviour
     {
         if (IsPerfectSize()) //change colour on perfect size
         {
-            spriteRenderer.color = perfectColor;
-           
+            float t = Mathf.InverseLerp(minPerfectSize, maxPerfectSize, currentScale);
+            spriteRenderer.color = Color.Lerp(normalColor, perfectColor, t);
+
+
         }
         else
         {
-            spriteRenderer.color = Color.white;
+            spriteRenderer.color = normalColor;
         }
     }
     private bool IsPerfectSize()
