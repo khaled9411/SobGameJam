@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SobGameJam.MiniGames;
+using SobGameJam.Events;
 using LightSide;
 
 namespace SobGameJam.MiniGames.WireCut
@@ -28,9 +29,30 @@ namespace SobGameJam.MiniGames.WireCut
         [SerializeField] private UniText clueText;
         [SerializeField] private UnityEngine.UI.Image timerFillImage; //should I make it a bar??
 
+        [Header("TNT Shake")]
+        [Tooltip("Assign the TntShake component on your TNT prefab in the scene.")]
+        [SerializeField] private TntShake tntShake;
+        [Tooltip("Seconds remaining at which the TNT starts shaking.")]
+        [SerializeField] private float shakeThreshold = 3f;
+
+        [Header("Explosion VFX")]
+        [Tooltip("Assign the explosion ParticleSystem PREFAB from the Project window (not a scene instance).")]
+        [SerializeField] private ParticleSystem explosionParticlesPrefab;
+        [Tooltip("Where to spawn the explosion — drag the TNT's Transform here.")]
+        [SerializeField] private Transform explosionSpawnPoint;
+
+        [Header("Sound Events (Broadcasting)")]
+        [Tooltip("Raised when the player cuts the correct wire.")]
+        [SerializeField] private VoidEventChannelSO onWireCutCorrectEvent;
+        [Tooltip("Raised when the player cuts the wrong wire.")]
+        [SerializeField] private VoidEventChannelSO onWireCutWrongEvent;
+        [Tooltip("Raised every frame while active, carrying seconds remaining.")]
+        [SerializeField] private FloatEventChannelSO onTimerTickEvent;
+
         private WireClueSO activeClue;
         private float timer;
         private float timerMax;
+        private bool isShaking;
 
         protected override void OnGameStarted(int roundNumber)
         {
@@ -44,6 +66,9 @@ namespace SobGameJam.MiniGames.WireCut
 
             timerMax = timeLimit;
             timer = timerMax;
+
+            isShaking = false;
+            if (tntShake != null) tntShake.StopShake();
         }
 
         /// <summary>
@@ -74,7 +99,19 @@ namespace SobGameJam.MiniGames.WireCut
             timer -= Time.deltaTime;
             if (timerFillImage != null) timerFillImage.fillAmount = timer / timerMax;
 
-            if (timer <= 0f) LoseGame();
+            if (onTimerTickEvent != null) onTimerTickEvent.RaiseEvent(timer);
+
+            if (!isShaking && timer <= shakeThreshold)
+            {
+                isShaking = true;
+                if (tntShake != null) tntShake.StartShake();
+            }
+
+            if (timer <= 0f)
+            {
+                TriggerExplosion();
+                LoseGame();
+            }
         }
 
         private WireClueSO PickRandomClue(int tier)
@@ -113,10 +150,41 @@ namespace SobGameJam.MiniGames.WireCut
         {
             if (!isGameActive) return;
 
+            if (tntShake != null) tntShake.StopShake();
+            isShaking = false;
+
             if (cutColor == activeClue.answerColor)
+            {
+                if (onWireCutCorrectEvent != null) onWireCutCorrectEvent.RaiseEvent();
                 WinGame();
+            }
             else
-                LoseGame();
+            {
+                if (onWireCutWrongEvent != null) onWireCutWrongEvent.RaiseEvent();
+                TriggerExplosion();
+                LoseGame(); // miniGameLostEvent (in MiniGameBase) covers the explosion sound
+            }
+        }
+
+        /// <summary>
+        /// Fires the explosion VFX. Called on wrong-wire cut here, and also
+        /// needs to be called from timeout below.
+        /// </summary>
+        private void TriggerExplosion()
+        {
+            Debug.Log("[WireCutController] TriggerExplosion called");
+
+            if (explosionParticlesPrefab != null)
+            {
+                Vector3 spawnPos = explosionSpawnPoint != null ? explosionSpawnPoint.position : transform.position;
+                ParticleSystem instance = Instantiate(explosionParticlesPrefab, spawnPos, Quaternion.identity);
+                instance.Play();
+                Destroy(instance.gameObject, instance.main.duration + instance.main.startLifetime.constantMax);
+            }
+            else
+            {
+                Debug.LogWarning("[WireCutController] explosionParticlesPrefab is NOT assigned!");
+            }
         }
     }
 }
