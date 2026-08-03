@@ -36,10 +36,12 @@ namespace SobGameJam.MiniGames
 
         [Header("Difficulty")]
         public BalloonDifficulty[] difficultyLevels;
+        public AnimationCurve difficultyCurve;
         public int currentDifficultyIndex = 0;
 
         [Header("Explosion")]
         public int particleCount = 10;
+        public ParticleSystem explosionParticles;
 
         [Header("Danger Zones")]
         public float explosionWarningPercent = 0.85f;
@@ -54,6 +56,15 @@ namespace SobGameJam.MiniGames
         public float wobbleScale = 0.05f;
         public float wobbleSpeed = 0.3f;
         public float wobbleRotation = 5f;
+
+        [Header("Audio (SFX)")]
+        public AudioSource sfxSource;
+        public AudioSource warningSource;
+
+        public AudioClip gameStartSound;
+        public AudioClip pumpSound;
+        public AudioClip explosionWarningSound;
+        public AudioClip shrinkWarningSound;
 
         private float currentScale = 1f;
         private int currentStepIndex = 0;
@@ -78,13 +89,26 @@ namespace SobGameJam.MiniGames
             if (resultText != null) resultText.Text = "";
 
             // Create an empty dummy object to calculate DOShakeScale safely.
-            // This allows us to use DOShakeScale without fighting PumpBalloon's DOPunchScale or Update().
             shakeDummy = new GameObject("ExplosionShakeDummy").transform;
             shakeDummy.SetParent(this.transform);
         }
 
         protected override void OnGameStarted(int roundNumber)
         {
+            if (difficultyLevels == null || difficultyLevels.Length == 0 || difficultyCurve.length == 0)
+            {
+                Debug.LogWarning("Difficulty Levels or Animation Curve is not set up correctly!");
+                return;
+            }
+
+            float maxCurveTime = difficultyCurve.keys[difficultyCurve.length - 1].time;
+
+            float evaluatedTime = Mathf.PingPong(roundNumber, maxCurveTime);
+
+            float curveValue = difficultyCurve.Evaluate(evaluatedTime);
+
+            currentDifficultyIndex = Mathf.Clamp(Mathf.RoundToInt(curveValue), 0, difficultyLevels.Length - 1);
+
             StartBalloonGame();
         }
 
@@ -98,6 +122,9 @@ namespace SobGameJam.MiniGames
             survivalTimer = 0f;
 
             if (resultText != null) resultText.Text = "";
+
+            if (sfxSource != null && gameStartSound != null)
+                sfxSource.PlayOneShot(gameStartSound);
 
             KillDangerTweens(); // Ensure a clean slate on restarts
             UpdateUI();
@@ -138,6 +165,7 @@ namespace SobGameJam.MiniGames
             else if (currentScale <= currentLevel.minScale)
             {
                 KillDangerTweens();
+
                 balloonTransform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack);
                 LoseMiniGame("انكمش البالون!");
             }
@@ -147,7 +175,6 @@ namespace SobGameJam.MiniGames
 
         private void UpdateDangerEffects()
         {
-            // Base normal scale is initialized at 1f
             float normalScale = 1f;
 
             // --- Explosion Evaluation ---
@@ -179,6 +206,13 @@ namespace SobGameJam.MiniGames
         {
             inExplosionZone = true;
             PlayExplosionLoop();
+
+            if (warningSource != null && explosionWarningSound != null)
+            {
+                warningSource.clip = explosionWarningSound;
+                warningSource.loop = true;
+                warningSource.Play();
+            }
         }
 
         private void StopExplosionWarning()
@@ -190,6 +224,11 @@ namespace SobGameJam.MiniGames
                 explosionTween = null;
             }
             _explosionShakeValue = 0f;
+
+            if (warningSource != null && warningSource.clip == explosionWarningSound)
+            {
+                warningSource.Stop();
+            }
         }
 
         private void PlayExplosionLoop()
@@ -199,23 +238,19 @@ namespace SobGameJam.MiniGames
             float expThreshold = Mathf.Lerp(1f, currentLevel.maxScale, explosionWarningPercent);
             float t = Mathf.InverseLerp(expThreshold, currentLevel.maxScale, currentScale);
 
-            // Interpolate values to feel like stretched rubber nearing its breaking point
             float currentStrength = Mathf.Lerp(0f, maxShakeStrength, t);
             int currentVibrato = (int)Mathf.Lerp(2, maxShakeVibrato, t);
             float currentDuration = Mathf.Lerp(maxShakeDuration * 1.5f, maxShakeDuration, t);
 
-            // Reset dummy scale to ensure consistent offsets
             shakeDummy.localScale = Vector3.zero;
 
-            // Use DOShakeScale on dummy. This is recursive and prevents restarting every single frame.
             explosionTween = shakeDummy.DOShakeScale(currentDuration, currentStrength, currentVibrato, 90f, true)
-                .OnUpdate(UpdateExplosionShakeValue) // Cached method group (Zero GC)
-                .OnComplete(PlayExplosionLoop);      // Cached method group (Zero GC)
+                .OnUpdate(UpdateExplosionShakeValue)
+                .OnComplete(PlayExplosionLoop);
         }
 
         private void UpdateExplosionShakeValue()
         {
-            // Extract the shake delta from our phantom object
             _explosionShakeValue = shakeDummy.localScale.x;
         }
 
@@ -226,6 +261,13 @@ namespace SobGameJam.MiniGames
             inShrinkZone = true;
             _shrinkWobbleDir = 1f;
             PlayShrinkLoop();
+
+            if (warningSource != null && shrinkWarningSound != null)
+            {
+                warningSource.clip = shrinkWarningSound;
+                warningSource.loop = true;
+                warningSource.Play();
+            }
         }
 
         private void StopShrinkWarning()
@@ -239,7 +281,12 @@ namespace SobGameJam.MiniGames
 
             _shrinkScaleWobble = 0f;
             _shrinkRotWobble = 0f;
-            balloonTransform.DORotate(Vector3.zero, 0.2f); // Smoothly correct rotation
+            balloonTransform.DORotate(Vector3.zero, 0.2f);
+
+            if (warningSource != null && warningSource.clip == shrinkWarningSound)
+            {
+                warningSource.Stop();
+            }
         }
 
         private void PlayShrinkLoop()
@@ -251,18 +298,16 @@ namespace SobGameJam.MiniGames
 
             float currentWobble = Mathf.Lerp(0f, wobbleScale, t);
             float currentRot = Mathf.Lerp(0f, wobbleRotation, t) * _shrinkWobbleDir;
-            float currentSpeed = Mathf.Lerp(wobbleSpeed * 1.5f, wobbleSpeed, t); // Wiggles slightly faster as it fails
+            float currentSpeed = Mathf.Lerp(wobbleSpeed * 1.5f, wobbleSpeed, t);
 
-            // Use a Sequence to manage phantom virtual variables without touching transform directly
             shrinkTween = DOTween.Sequence()
                 .Join(DOTween.To(() => _shrinkScaleWobble, x => _shrinkScaleWobble = x, currentWobble, currentSpeed).SetEase(Ease.InOutSine).SetLoops(2, LoopType.Yoyo))
                 .Join(DOTween.To(() => _shrinkRotWobble, x => _shrinkRotWobble = x, currentRot, currentSpeed).SetEase(Ease.InOutSine).SetLoops(2, LoopType.Yoyo))
-                .OnComplete(OnShrinkLoopComplete); // Cached method group (Zero GC)
+                .OnComplete(OnShrinkLoopComplete);
         }
 
         private void OnShrinkLoopComplete()
         {
-            // Alternate rotation targets so the wobble accurately sweeps left-to-right
             _shrinkWobbleDir *= -1f;
             PlayShrinkLoop();
         }
@@ -279,12 +324,17 @@ namespace SobGameJam.MiniGames
             _explosionShakeValue = 0f;
             _shrinkScaleWobble = 0f;
             _shrinkRotWobble = 0f;
+
+            if (warningSource != null) warningSource.Stop();
         }
 
         #endregion
 
         private void PumpBalloon()
         {
+            if (sfxSource != null && pumpSound != null)
+                sfxSource.PlayOneShot(pumpSound);
+
             float pumpAmount = currentLevel.inflationSteps[currentStepIndex];
             currentScale += pumpAmount;
 
@@ -317,7 +367,7 @@ namespace SobGameJam.MiniGames
             if (nextPumpText != null)
             {
                 float nextPumpPercentage = currentLevel.inflationSteps[currentStepIndex] * 100f;
-                nextPumpText.Text = "النفخه الجايه: +" + nextPumpPercentage.ToString("F0") + "%";
+                nextPumpText.Text = "النفخه الجايه: +" + nextPumpPercentage.ToString("F0") + "%" +"\n اضغط Space";
             }
         }
 
@@ -382,6 +432,7 @@ namespace SobGameJam.MiniGames
 
         public void LoseMiniGame(string reason)
         {
+            explosionParticles?.Play();
             if (resultText != null) resultText.Text = reason;
             Debug.Log("You lost! The reason: " + reason);
             LoseGame();
