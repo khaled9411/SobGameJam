@@ -29,6 +29,11 @@ namespace SobGameJam.UI
         [SerializeField] private UniText finalRoundText;
         [SerializeField] private UniText highScoreText;
 
+        [Header("Game Over Animations")]
+        [SerializeField] private RectTransform gameOverLogo;
+        [SerializeField] private RectTransform[] gameOverButtons;
+        private Sequence gameOverSequence;
+
         [Header("Main Menu Screen")]
         [SerializeField] private UniText mainMenuHighScoreText;
 
@@ -263,29 +268,99 @@ namespace SobGameJam.UI
         {
             if (roundNumberText != null) roundNumberText.Text = "الجولة: " + roundNumber;
         }
+
+        private void AnimateGameOverOut(System.Action onComplete)
+        {
+            gameOverSequence?.Kill();
+            gameOverSequence = DOTween.Sequence();
+
+            if (gameOverButtons != null)
+            {
+                foreach (var btn in gameOverButtons)
+                {
+                    gameOverSequence.Join(btn.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
+                }
+            }
+
+            if (gameOverLogo != null) gameOverSequence.Join(gameOverLogo.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
+            if (finalRoundText != null) gameOverSequence.Join(finalRoundText.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
+            if (highScoreText != null) gameOverSequence.Join(highScoreText.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
+
+            gameOverSequence.OnComplete(() => onComplete?.Invoke());
+        }
+
+        private void AnimateGameOverScreen()
+        {
+            gameOverSequence?.Kill();
+            gameOverSequence = DOTween.Sequence();
+
+            if (gameOverLogo != null) gameOverLogo.localScale = Vector3.zero;
+            if (finalRoundText != null) finalRoundText.transform.localScale = Vector3.zero;
+            if (highScoreText != null) highScoreText.transform.localScale = Vector3.zero;
+
+            if (gameOverButtons != null)
+            {
+                foreach (var btn in gameOverButtons) btn.localScale = Vector3.zero;
+            }
+
+            if (gameOverLogo != null)
+            {
+                gameOverSequence.Append(gameOverLogo.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBounce));
+                gameOverSequence.Join(gameOverLogo.DOPunchRotation(new Vector3(0, 0, 8f), 0.5f, 6, 0.5f));
+            }
+
+            if (gameOverButtons != null)
+            {
+                foreach (var btn in gameOverButtons)
+                {
+                    gameOverSequence.Append(btn.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutBack));
+                }
+            }
+
+            if (finalRoundText != null)
+                gameOverSequence.Join(finalRoundText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack));
+
+            if (highScoreText != null)
+                gameOverSequence.Join(highScoreText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).SetDelay(0.1f));
+        }
         private void HandleGameOver(int finalRound)
         {
             gameplayHUD.SetActive(false);
             gameOverScreen.SetActive(true);
-            if (finalRoundText != null) finalRoundText.Text = "الجولة: " + finalRound;
+
+            if (finalRoundText != null)
+                finalRoundText.Text = "الجولة: " + finalRound;
+
             int previousHighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
             if (finalRound > previousHighScore)
             {
                 PlayerPrefs.SetInt(HighScoreKey, finalRound);
                 PlayerPrefs.Save();
             }
-            if (highScoreText != null) highScoreText.Text = "الرقم القياسي: " + PlayerPrefs.GetInt(HighScoreKey, 0);
+
+            if (highScoreText != null)
+                highScoreText.Text = "الرقم القياسي: " + PlayerPrefs.GetInt(HighScoreKey, 0);
+
+            AnimateGameOverScreen();
         }
+
         public void OnRestartButtonPressed()
         {
-            gameOverScreen.SetActive(false);
-            gameplayHUD.SetActive(true);
-            gameManager.RestartGame();
+            AnimateGameOverOut(() =>
+            {
+                gameOverScreen.SetActive(false);
+                gameplayHUD.SetActive(true);
+                gameManager.RestartGame();
+            });
         }
+
         public void OnGameOverMainMenuPressed()
         {
-            gameManager.ReturnToMenu();
-            ShowMainMenu();
+            AnimateGameOverOut(() =>
+            {
+                gameManager.ReturnToMenu();
+                ShowMainMenu();
+            });
         }
         public void OnGameOverExitPressed()
         {

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8c9cfa26abfee488c85f1582747f6a02
-DefaultImporter:
+guid: 8bbc340bdf027402cb28609ab9c43409
+TextScriptImporter:
   externalObjects: {}
   userData: 
   assetBundleName: 
@@ -10,5 +10,5 @@ AssetOrigin:
   productId: 325160
   packageName: Buttons, Slides, Dings and Drops
   packageVersion: 1.0
-  assetPath: Assets/Scenes/SampleScene.unity
+  assetPath: Assets/Buttons, Slides, Dings and Drops/Documentation/ReadMe.txt
   uploadId: 770899
