@@ -13,5 +13,11 @@ MonoBehaviour:
   m_Name: NuclearReactor
   m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.Core.MiniGameData
   sceneName: NuclearReactor
-  instructionPrompt: PRESS ON TIME
+  instructionSprite: {fileID: 21300000, guid: 5981ba229b7099348bd3ac21adbb0704, type: 3}
+  gameName: "\u0623\u0628\u0637\u0644 \u0627\u0644\u0645\u0641\u0627\u0639\u0644
+    \u0627\u0644\u0646\u0648\u0648\u064A!"
+  instructionPrompt: "\u0627\u0636\u063A\u0637 \u0643\u0644 \u0627\u0644\u0645\u0641\u0627\u062A\u064A\u062D
+    \u0639\u0644\u0649 \u0627\u0644\u0634\u0627\u0634\u0629 \u0642\u0628\u0644 \u0623\u0646
+    \u064A\u0643\u062A\u0645\u0644 \u0627\u0644\u0639\u062F\u0627\u062F \u0648\u062A\u0635\u0644
+    \u0644\u0644\u0646\u0642\u0637\u0629 \u0627\u0644\u062D\u0627\u0631\u062C\u0629."
   instructionDuration: 1.5
