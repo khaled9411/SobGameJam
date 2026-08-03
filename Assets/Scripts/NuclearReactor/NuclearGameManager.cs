@@ -338,13 +338,12 @@ namespace SobGameJam.MiniGames
 
         public void LoseMiniGame()
         {
-            activeNodes.Clear();
+            Debug.Log("Player lost the mini-game!");
             LoseGame();
         }
 
         public void WinMiniGame()
         {
-            activeNodes.Clear();
             WinGame();
         }
 

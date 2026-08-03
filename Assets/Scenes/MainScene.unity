@@ -206,6 +206,7 @@ GameObject:
   - component: {fileID: 129489399}
   - component: {fileID: 129489398}
   - component: {fileID: 129489397}
+  - component: {fileID: 129489400}
   m_Layer: 5
   m_Name: Exit button
   m_TagString: Untagged
@@ -252,7 +253,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
@@ -327,6 +328,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 129489395}
   m_CullTransparentMesh: 1
+--- !u!114 &129489400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 129489395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2157aca7c354cfd49bb8734243aa2f07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.UI.UIButtonAnimator
+  hoverScale: 1.1
+  clickScale: 0.9
+  animationDuration: 0.2
 --- !u!1 &158019902
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,6 +355,7 @@ GameObject:
   - component: {fileID: 158019906}
   - component: {fileID: 158019905}
   - component: {fileID: 158019904}
+  - component: {fileID: 158019907}
   m_Layer: 5
   m_Name: Restart button
   m_TagString: Untagged
@@ -385,7 +402,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.6431373, g: 0.6431373, b: 0.6431373, a: 1}
@@ -460,6 +477,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158019902}
   m_CullTransparentMesh: 1
+--- !u!114 &158019907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158019902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2157aca7c354cfd49bb8734243aa2f07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.UI.UIButtonAnimator
+  hoverScale: 1.1
+  clickScale: 0.9
+  animationDuration: 0.2
 --- !u!1 &181841892
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,6 +536,7 @@ GameObject:
   - component: {fileID: 185639419}
   - component: {fileID: 185639418}
   - component: {fileID: 185639417}
+  - component: {fileID: 185639420}
   m_Layer: 5
   m_Name: credits button
   m_TagString: Untagged
@@ -550,7 +583,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
@@ -613,6 +646,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 185639415}
   m_CullTransparentMesh: 1
+--- !u!114 &185639420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185639415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2157aca7c354cfd49bb8734243aa2f07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.UI.UIButtonAnimator
+  hoverScale: 1.1
+  clickScale: 0.9
+  animationDuration: 0.2
 --- !u!1 &232220841
 GameObject:
   m_ObjectHideFlags: 0
@@ -1917,6 +1965,7 @@ GameObject:
   - component: {fileID: 853619534}
   - component: {fileID: 853619533}
   - component: {fileID: 853619532}
+  - component: {fileID: 853619535}
   m_Layer: 5
   m_Name: Start button
   m_TagString: Untagged
@@ -1963,7 +2012,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
@@ -2038,6 +2087,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 853619530}
   m_CullTransparentMesh: 1
+--- !u!114 &853619535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853619530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2157aca7c354cfd49bb8734243aa2f07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.UI.UIButtonAnimator
+  hoverScale: 1.1
+  clickScale: 0.9
+  animationDuration: 0.2
 --- !u!1 &932735755
 GameObject:
   m_ObjectHideFlags: 0
@@ -2050,6 +2114,7 @@ GameObject:
   - component: {fileID: 932735759}
   - component: {fileID: 932735758}
   - component: {fileID: 932735757}
+  - component: {fileID: 932735760}
   m_Layer: 5
   m_Name: Settings button
   m_TagString: Untagged
@@ -2095,7 +2160,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.49019608, g: 0.4862745, b: 0.4862745, a: 1}
@@ -2158,6 +2223,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 932735755}
   m_CullTransparentMesh: 1
+--- !u!114 &932735760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932735755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2157aca7c354cfd49bb8734243aa2f07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.UI.UIButtonAnimator
+  hoverScale: 1.1
+  clickScale: 0.9
+  animationDuration: 0.2
 --- !u!1 &995714941
 GameObject:
   m_ObjectHideFlags: 0
@@ -2170,6 +2250,7 @@ GameObject:
   - component: {fileID: 995714945}
   - component: {fileID: 995714944}
   - component: {fileID: 995714943}
+  - component: {fileID: 995714946}
   m_Layer: 5
   m_Name: Settings button
   m_TagString: Untagged
@@ -2215,7 +2296,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.6431373, g: 0.6431373, b: 0.6431373, a: 1}
@@ -2278,6 +2359,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 995714941}
   m_CullTransparentMesh: 1
+--- !u!114 &995714946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995714941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2157aca7c354cfd49bb8734243aa2f07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.UI.UIButtonAnimator
+  hoverScale: 1.1
+  clickScale: 0.9
+  animationDuration: 0.2
 --- !u!1 &997933187
 GameObject:
   m_ObjectHideFlags: 0
@@ -2721,6 +2817,11 @@ MonoBehaviour:
   gameplayHUD: {fileID: 1118310347}
   gameOverScreen: {fileID: 1883415004}
   InstructionScreen: {fileID: 181841892}
+  mainMenuLogo: {fileID: 1159056455}
+  mainMenuButtons:
+  - {fileID: 853619531}
+  - {fileID: 129489396}
+  - {fileID: 185639416}
   heartDimmedOverlays:
   - {fileID: 2047093276}
   - {fileID: 296348045}
@@ -2766,6 +2867,7 @@ GameObject:
   - component: {fileID: 1211122842}
   - component: {fileID: 1211122841}
   - component: {fileID: 1211122840}
+  - component: {fileID: 1211122843}
   m_Layer: 5
   m_Name: Main Menu button
   m_TagString: Untagged
@@ -2812,7 +2914,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.6431373, g: 0.6431373, b: 0.6431373, a: 1}
@@ -2887,6 +2989,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1211122838}
   m_CullTransparentMesh: 1
+--- !u!114 &1211122843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211122838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2157aca7c354cfd49bb8734243aa2f07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.UI.UIButtonAnimator
+  hoverScale: 1.1
+  clickScale: 0.9
+  animationDuration: 0.2
 --- !u!1 &1213708208
 GameObject:
   m_ObjectHideFlags: 0
@@ -2899,6 +3016,7 @@ GameObject:
   - component: {fileID: 1213708212}
   - component: {fileID: 1213708211}
   - component: {fileID: 1213708210}
+  - component: {fileID: 1213708213}
   m_Layer: 5
   m_Name: Exit Button
   m_TagString: Untagged
@@ -2945,7 +3063,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.6431373, g: 0.6431373, b: 0.6431373, a: 1}
@@ -3020,6 +3138,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213708208}
   m_CullTransparentMesh: 1
+--- !u!114 &1213708213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213708208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2157aca7c354cfd49bb8734243aa2f07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.UI.UIButtonAnimator
+  hoverScale: 1.1
+  clickScale: 0.9
+  animationDuration: 0.2
 --- !u!1 &1255675538
 GameObject:
   m_ObjectHideFlags: 0
