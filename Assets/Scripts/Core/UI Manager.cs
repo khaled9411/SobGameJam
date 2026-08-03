@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using SobGameJam.Core;
 using SobGameJam.Events;
 using TMPro;
+using LightSide;
 
 namespace SobGameJam.UI
 {
@@ -21,14 +22,14 @@ namespace SobGameJam.UI
         [Header("Gameplay HUD")]
         [Tooltip("Assign in order, index 0 = first heart, etc.")]
         [SerializeField] private Image[] heartDimmedOverlays;
-        [SerializeField] private TextMeshProUGUI roundNumberText; // swap for TMPro.TextMeshProUGUI if your project uses TMP
+        [SerializeField] private UniText roundNumberText; // swap for TMPro.TextMeshProUGUI if your project uses TMP
 
         [Header("Game Over Screen")]
-        [SerializeField] private TextMeshProUGUI finalRoundText;
-        [SerializeField] private TextMeshProUGUI highScoreText;
+        [SerializeField] private UniText finalRoundText;
+        [SerializeField] private UniText highScoreText;
 
         [Header("Main Menu Screen")]
-        [SerializeField] private TextMeshProUGUI mainMenuHighScoreText;
+        [SerializeField] private UniText mainMenuHighScoreText;
 
         [Header("Game Manager Reference")]
         [Tooltip("Drag the GameManager GameObject here so Start/Restart can call back into it.")]
@@ -72,7 +73,7 @@ namespace SobGameJam.UI
             gameOverScreen.SetActive(false);
 
             if (mainMenuHighScoreText != null)
-                mainMenuHighScoreText.text = "Best: " + PlayerPrefs.GetInt(HighScoreKey, 0);
+                mainMenuHighScoreText.Text = "Best: " + PlayerPrefs.GetInt(HighScoreKey, 0);
         }
 
         /// <summary>Wire this to the Main Menu's Start button OnClick().</summary>
@@ -117,7 +118,7 @@ namespace SobGameJam.UI
         private void HandleRoundStarted(int roundNumber)
         {
             if (roundNumberText != null)
-                roundNumberText.text = "Round " + roundNumber;
+                roundNumberText.Text = "Round " + roundNumber;
         }
 
         // ---------- GAME OVER ----------
@@ -128,7 +129,7 @@ namespace SobGameJam.UI
             gameOverScreen.SetActive(true);
 
             if (finalRoundText != null)
-                finalRoundText.text = "Round Reached: " + finalRound;
+                finalRoundText.Text = "Round Reached: " + finalRound;
 
             int previousHighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
             if (finalRound > previousHighScore)
@@ -138,7 +139,7 @@ namespace SobGameJam.UI
             }
 
             if (highScoreText != null)
-                highScoreText.text = "Best: " + PlayerPrefs.GetInt(HighScoreKey, 0);
+                highScoreText.Text = "Best: " + PlayerPrefs.GetInt(HighScoreKey, 0);
         }
 
         /// <summary>Wire this to the Game Over screen's Restart button OnClick().</summary>
