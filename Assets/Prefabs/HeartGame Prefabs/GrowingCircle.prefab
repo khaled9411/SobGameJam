@@ -108,8 +108,8 @@ MonoBehaviour:
   startingScale: 0
   growSpeed: 1.1
   maxSize: 1.5
-  minPerfectSize: 1
-  maxPerfectSize: 1.35
+  minPerfectSize: 1.45
+  maxPerfectSize: 1.5
   perfectColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!58 &-236584150288571377
 CircleCollider2D:
