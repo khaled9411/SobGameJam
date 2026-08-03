@@ -12,8 +12,8 @@ public class PhaseTwoCircleSpawner : MonoBehaviour
     private int maxCircleAmount = 8;
 
     [SerializeField] private float emptyGap = 1f;
-    [SerializeField] private Vector2 minBounds = new Vector2(-7f, -3.5f);
-    [SerializeField] private Vector2 maxBounds = new Vector2(7f, 5f);
+    [SerializeField] private Vector2 minBounds = new Vector2(-6.77f, -1.61f);
+    [SerializeField] private Vector2 maxBounds = new Vector2(7.43f, 4.63f);
     public void StartSpawning()
     {
         StartCoroutine(SpawnRoutine());

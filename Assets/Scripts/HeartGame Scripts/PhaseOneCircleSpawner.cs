@@ -8,10 +8,10 @@ public class PhaseOneCircleSpawner : MonoBehaviour
     public event System.Action OnBadTiming;
     public event System.Action OnMissed;
     public event System.Action OnOutOfCircles;
-    [SerializeField] private GrowingCircle circlePrefab;
+    [SerializeField] private CircleRoot circlePrefab;
     [SerializeField] private Transform parent;
-    [SerializeField] private Vector2 minBounds = new Vector2(-7f, -3.5f);
-    [SerializeField] private Vector2 maxBounds = new Vector2(7f, 5f);
+    [SerializeField] private Vector2 minBounds = new Vector2(-6.77f, -1.61f);
+    [SerializeField] private Vector2 maxBounds = new Vector2(7.43f, 4.63f);
     [SerializeField] private float baseGrowSpeed = 1.1f;
     [SerializeField] private float maxGrowSpeed = 2.5f;
 
@@ -38,21 +38,30 @@ public class PhaseOneCircleSpawner : MonoBehaviour
         {
             Vector2 spawnPosition = GetRandomPosition();
 
-            GrowingCircle circle =  Instantiate(circlePrefab, spawnPosition, Quaternion.identity, parent);
+
+            CircleRoot root = Instantiate(circlePrefab, spawnPosition, Quaternion.identity, parent);
+
+            GrowingCircle circle = root.GrowingCircle;
+
             circle.SetGrowSpeed(currentGrowSpeed);
+
             circlesSpawned++;
             if (circlesSpawned >= maxCircles)
             {
                 OnOutOfCircles?.Invoke();
                 yield break;
             }
-            circle.OnPerfectTiming += () => OnPerfectTiming?.Invoke();
+            circle.OnPerfectTiming += () =>
+            {
+                Debug.Log("Spawner forwarding perfect");
+                OnPerfectTiming?.Invoke();
+            };
             circle.OnBadTiming += () => OnBadTiming?.Invoke();
             circle.OnMissed += () => OnMissed?.Invoke();
 
-            while (circle != null)
+            while (root != null)
             {
-              yield return null;
+                yield return null;
             }
         }
         
