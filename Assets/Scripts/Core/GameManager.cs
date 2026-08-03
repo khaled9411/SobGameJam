@@ -32,6 +32,7 @@ namespace SobGameJam.Core
         private MiniGameData currentMiniGame;
         private int lastMiniGameIndex = -1;
         private bool isTransitioning = false;
+        private bool isRestarting = false; // NEW: guards RestartGame()/ReturnToMenu() against being re-entered mid-cleanup
 
         // NOTE: Start() no longer auto-begins a run. GameManager now sits idle until
         // UIManager calls BeginNewRun() (wired to the Main Menu's Start button).
@@ -58,7 +59,8 @@ namespace SobGameJam.Core
         /// <summary>
         /// Resets runtime state (lives, round) and starts loading the first mini-game.
         /// PUBLIC so UIManager can call this directly when the player presses Start
-        /// on the Main Menu, and again on Restart from the Game Over screen.
+        /// on the Main Menu. Also called automatically at the end of RestartRoutine
+        /// when startNewRunAfter is true (i.e. the Restart button, not Main Menu).
         /// Does NOT touch high score — that lives entirely in UIManager via PlayerPrefs.
         /// </summary>
         public void BeginNewRun()
@@ -75,18 +77,33 @@ namespace SobGameJam.Core
         }
 
         /// <summary>
-        /// Public entry point for a Restart button. Call this from UIManager.
-        /// Handles unloading whatever mini-game scene is currently active before
-        /// starting a fresh run, so we don't leak an old additive scene.
+        /// Public entry point for a Restart button. Unloads whatever mini-game scene
+        /// is currently active, then automatically begins a fresh run immediately
+        /// (skips the Main Menu — jumps straight back into gameplay).
         /// </summary>
         public void RestartGame()
         {
-            StopAllCoroutines(); // safety: cancel any in-flight transition before restarting
-            StartCoroutine(RestartRoutine());
+            if (isRestarting) return;
+            StartCoroutine(RestartRoutine(startNewRunAfter: true));
         }
 
-        private IEnumerator RestartRoutine()
+        /// <summary>
+        /// Public entry point for a "return to Main Menu" action (e.g. from the
+        /// Game Over screen). Unloads whatever mini-game scene is currently active,
+        /// but does NOT start a new run — the player must press Start again.
+        /// This is what prevents the double-load bug: cleanup happens here, and
+        /// BeginNewRun() only ever fires from an explicit Start button press.
+        /// </summary>
+        public void ReturnToMenu()
         {
+            if (isRestarting) return;
+            StartCoroutine(RestartRoutine(startNewRunAfter: false));
+        }
+
+        private IEnumerator RestartRoutine(bool startNewRunAfter)
+        {
+            isRestarting = true;
+
             if (currentMiniGame != null)
             {
                 AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(currentMiniGame.sceneName);
@@ -100,7 +117,12 @@ namespace SobGameJam.Core
                 currentMiniGame = null;
             }
 
-            BeginNewRun();
+            isRestarting = false;
+
+            if (startNewRunAfter)
+            {
+                BeginNewRun();
+            }
         }
 
         private void HandleMiniGameWon()
@@ -142,6 +164,9 @@ namespace SobGameJam.Core
                 if (onGameOverEvent != null) onGameOverEvent.RaiseEvent(currentRound);
 
                 isTransitioning = false;
+                // NOTE: currentMiniGame is intentionally left loaded here — it gets
+                // cleaned up later by RestartRoutine() when the player presses either
+                // Restart or Main Menu from the Game Over screen.
                 yield break;
             }
 
@@ -169,11 +194,13 @@ namespace SobGameJam.Core
                 Debug.LogError("No MiniGames assigned to GameManager!");
                 yield break;
             }
+
             int randomIndex;
-            do {
-                // Pick a random game (could add logic here to not repeat the last game)
+            do
+            {
+                // Pick a random game, avoiding an immediate repeat of the last one played
                 randomIndex = Random.Range(0, availableMiniGames.Count);
-            } while (lastMiniGameIndex == randomIndex);
+            } while (availableMiniGames.Count > 1 && lastMiniGameIndex == randomIndex);
             lastMiniGameIndex = randomIndex;
 
             currentMiniGame = availableMiniGames[randomIndex];
