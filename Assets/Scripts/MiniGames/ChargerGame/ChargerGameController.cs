@@ -1,3 +1,4 @@
+using SobGameJam.Events;
 using System.Collections;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace SobGameJam.MiniGames.ChargerGame
 
         [Header("Game Configuration")]
         [SerializeField] private ChargerGameDataSO gameData;
+        [SerializeField] private FloatEventChannelSO OnTimeChangeEvent;
         
         [Header("Components")]
         [SerializeField] private ChargerMazeGenerator2D mazeGenerator;
@@ -27,6 +29,7 @@ namespace SobGameJam.MiniGames.ChargerGame
         private float originalCameraSize;
         private bool hasSavedCameraState = false;
 
+        private float currentTimeLimit;
         protected override void OnGameStarted(int roundNumber)
         {
             if (gameData == null)
@@ -58,7 +61,7 @@ namespace SobGameJam.MiniGames.ChargerGame
             Cursor.visible = false;
 
             // Evaluate Difficulty Curves
-            float timeLimit = gameData.timeLimitCurve.Evaluate(roundNumber);
+            currentTimeLimit = gameData.timeLimitCurve.Evaluate(roundNumber);
             float plugSize = gameData.plugSizeCurve.Evaluate(roundNumber);
             
 
@@ -126,7 +129,7 @@ namespace SobGameJam.MiniGames.ChargerGame
             }
 
             // Start Timer
-            currentTime = timeLimit;
+            currentTime = currentTimeLimit;
             if (timerCoroutine != null)
             {
                 StopCoroutine(timerCoroutine);
@@ -141,6 +144,10 @@ namespace SobGameJam.MiniGames.ChargerGame
                 if (!isGameActive) yield break;
 
                 currentTime -= Time.deltaTime;
+                if (OnTimeChangeEvent != null)
+                {
+                    OnTimeChangeEvent.RaiseEvent(NormalizedRmainingTime());
+                }
                 // Optional: Update a timer UI here if there is one
 
                 yield return null;
@@ -152,7 +159,10 @@ namespace SobGameJam.MiniGames.ChargerGame
                 HandleTimeOut();
             }
         }
-
+        float NormalizedRmainingTime()
+        {
+            return currentTime / currentTimeLimit;
+        }
         private void HandleWallHit()
         {
             if (!isGameActive) return;
