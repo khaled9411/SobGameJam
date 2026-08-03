@@ -49,6 +49,9 @@ namespace SobGameJam.MiniGames.WireCut
         [Tooltip("Raised every frame while active, carrying seconds remaining.")]
         [SerializeField] private FloatEventChannelSO onTimerTickEvent;
 
+        //broadcast
+        [SerializeField] private VoidEventChannelSO OnGameStart;
+
         private WireClueSO activeClue;
         private float timer;
         private float timerMax;
@@ -56,6 +59,7 @@ namespace SobGameJam.MiniGames.WireCut
 
         protected override void OnGameStarted(int roundNumber)
         {
+            OnGameStart.RaiseEvent();
             int clueTier = GetClueTier(roundNumber);
             float timeLimit = GetTimeLimit(roundNumber);
 

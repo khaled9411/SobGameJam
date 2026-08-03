@@ -36,6 +36,7 @@ namespace SobGameJam.Core
 
         [Header("setting")]
         [SerializeField] private float timeAfterInsturctionHideToPlay = 1;
+        [SerializeField] private float timeAfterRoundFinishing = 1;
         [SerializeField] private Camera cam;
 
         private MiniGameData currentMiniGame;
@@ -179,7 +180,7 @@ namespace SobGameJam.Core
                 // Restart or Main Menu from the Game Over screen.
                 yield break;
             }
-
+            yield return new WaitForSeconds(timeAfterRoundFinishing);
             // 3. Unload current mini-game scene
             if (currentMiniGame != null)
             {
