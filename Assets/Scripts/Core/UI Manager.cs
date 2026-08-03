@@ -50,6 +50,8 @@ namespace SobGameJam.UI
         private const string HighScoreKey = "HighScore";
         private int _currentLives = -1;
 
+        private Sequence instructionSequence;
+
         private void OnEnable()
         {
             if (onLivesChangedEvent != null) onLivesChangedEvent.OnEventRaised += HandleLivesChanged;
@@ -163,13 +165,42 @@ namespace SobGameJam.UI
 #endif
         }
 
-        private void HideInsturction() { InstructionScreen.SetActive(false); }
         private void HandleInstruction(MiniGameData arg0)
         {
             InstructionScreen.SetActive(true);
-            gameInstruction.Text = arg0.instructionPrompt;
             gameTitle.Text = arg0.gameName;
             gameSprite.sprite = arg0.instructionSprite;
+            gameInstruction.Text = arg0.instructionPrompt;
+
+            instructionSequence?.Kill();
+            instructionSequence = DOTween.Sequence();
+
+            gameTitle.transform.localScale = Vector3.zero;
+            gameSprite.transform.localScale = Vector3.zero;
+            gameInstruction.transform.localScale = Vector3.zero;
+
+            instructionSequence.Append(gameTitle.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack));
+
+            instructionSequence.Join(gameSprite.transform.DOScale(Vector3.one, 0.35f).SetEase(Ease.OutBack).SetDelay(0.1f));
+
+            instructionSequence.Join(gameInstruction.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).SetDelay(0.2f));
+
+            instructionSequence.Join(gameSprite.transform.DOPunchRotation(new Vector3(0, 0, 15f), 0.4f, 5, 0.5f).SetDelay(0.15f));
+        }
+
+        private void HideInsturction()
+        {
+            instructionSequence?.Kill();
+            instructionSequence = DOTween.Sequence();
+
+            instructionSequence.Append(gameTitle.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
+            instructionSequence.Join(gameSprite.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
+            instructionSequence.Join(gameInstruction.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
+
+            instructionSequence.OnComplete(() =>
+            {
+                InstructionScreen.SetActive(false);
+            });
         }
         private void HandleLivesChanged(int newLives)
         {
