@@ -1,6 +1,8 @@
-using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 namespace SobGameJam.MiniGames
 {
@@ -35,22 +37,31 @@ namespace SobGameJam.MiniGames
 
        
         [SerializeField] private AudioClip heartbeatLoop;
+        [SerializeField] private AudioClip flatlineLoop;
+        [SerializeField] private Volume volume;
+        [SerializeField] private float maxVignetteIntensity = 0.3f;
+        [SerializeField] private float vignetteSmoothSpeed = 5f;
+
+        private Vignette vignette;
 
 
 
         private bool isPhaseTwo = false;
+        private bool gameEnded;
         private float currentScore = 0;
         private Coroutine spikeRoutine;
 
 
-        private void Start()
-        {
-            OnGameStarted(1);
-        }
+     
 
 
         protected override void OnGameStarted(int roundNumber)
         {
+            gameEnded = false;
+            backgroundAudio.clip = flatlineLoop;
+            backgroundAudio.loop = true;
+            backgroundAudio.Play();
+            volume.profile.TryGet(out vignette);
             Debug.Log($"Round {roundNumber} started!");
 
             float difficulty = difficultyCurve.Evaluate(roundNumber); //difficulty
@@ -144,13 +155,62 @@ namespace SobGameJam.MiniGames
         private void RefreshScoreBar()
         {
             scoreBar.value = currentScore;
-            //Add VFX here
+            
+        }
+        private void RefreshVignette()
+        {
+            if (vignette == null)
+                return;
+
+            float targetIntensity;
+
+            if (!isPhaseTwo)
+            {
+                // Phase 1
+                float t = currentScore / maxScore;
+                targetIntensity = Mathf.Lerp(maxVignetteIntensity, 0f, t);
+            }
+            else
+            {
+                // Phase 2
+                float distanceOutsideSafeZone = 0f;
+
+                if (currentScore < safeMin)
+                {
+                    distanceOutsideSafeZone = safeMin - currentScore;
+                }
+                else if (currentScore > safeMax)
+                {
+                    distanceOutsideSafeZone = currentScore - safeMax;
+                }
+
+                float maxDistance = Mathf.Max(safeMin, maxScore - safeMax);
+
+                float normalized = Mathf.Clamp01(distanceOutsideSafeZone / 20f);
+
+                targetIntensity = Mathf.Lerp(0f, maxVignetteIntensity, normalized);
+
+            }
+
+            vignette.intensity.value = Mathf.Lerp(
+                vignette.intensity.value,
+                targetIntensity,
+                Time.deltaTime * vignetteSmoothSpeed);
+        }
+        private void Update()
+        {
+            if (gameEnded)
+                return;
+
+            RefreshVignette();
         }
 
         private void HandleOutOfCircles()
         {
             if (!isPhaseTwo)
                 LoseGame();
+            gameEnded = true;
+            vignette.intensity.value = maxVignetteIntensity;
             Debug.Log("Game Lost");
         }
         private void StartPhaseTwo()
@@ -227,6 +287,7 @@ namespace SobGameJam.MiniGames
             if (currentScore >= safeMin && currentScore <= safeMax)
             {
                 WinGame();
+                vignette.intensity.value = 0f;
                 Debug.Log("GameWon");
             }
                 
@@ -235,10 +296,15 @@ namespace SobGameJam.MiniGames
 
                 LoseGame();
                 Debug.Log("GameLost");
+
+                gameEnded = true;
+                vignette.intensity.value = maxVignetteIntensity;
                 heartMonitor.SetSpikeHeight(0f, 0f);
                 spawnerTwo.StopSpawning();
-               
-               
+                backgroundAudio.clip = flatlineLoop;
+                backgroundAudio.Play();
+
+
 
             }
         }

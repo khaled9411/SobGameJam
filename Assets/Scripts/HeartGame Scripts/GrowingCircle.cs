@@ -17,6 +17,7 @@ public class GrowingCircle : MonoBehaviour
     [SerializeField] float maxPerfectSize = 1.5f;
     [SerializeField] private Color perfectColor;
     [SerializeField] private Color normalColor;
+    [SerializeField] private ParticleSystem perfectClickEffect;
 
 
     private float currentScale;
@@ -61,6 +62,7 @@ public class GrowingCircle : MonoBehaviour
         {
             OnPerfectTiming?.Invoke();
             Debug.Log("Perfect fired");
+            Instantiate(perfectClickEffect, transform.position, Quaternion.identity);
 
         }
         else

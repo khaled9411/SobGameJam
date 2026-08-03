@@ -112,6 +112,7 @@ MonoBehaviour:
   maxPerfectSize: 1.5
   perfectColor: {r: 0.6039216, g: 0.19607843, b: 0.2509804, a: 1}
   normalColor: {r: 0.86415094, g: 0.71471274, b: 0.65708077, a: 1}
+  perfectClickEffect: {fileID: 2419090609368678595, guid: 394f35c2e1a15bb4c966d7ead71b9881, type: 3}
 --- !u!58 &-236584150288571377
 CircleCollider2D:
   m_ObjectHideFlags: 0
