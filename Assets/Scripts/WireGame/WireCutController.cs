@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SobGameJam.MiniGames;
+using LightSide;
 
 namespace SobGameJam.MiniGames.WireCut
 {
@@ -24,7 +25,7 @@ namespace SobGameJam.MiniGames.WireCut
         [SerializeField] private float minimumTimeLimit = 4f;
 
         [Header("UI")]
-        [SerializeField] private TMPro.TextMeshProUGUI clueText;
+        [SerializeField] private UniText clueText;
         [SerializeField] private UnityEngine.UI.Image timerFillImage; //should I make it a bar??
 
         private WireClueSO activeClue;
@@ -37,7 +38,7 @@ namespace SobGameJam.MiniGames.WireCut
             float timeLimit = GetTimeLimit(roundNumber);
 
             activeClue = PickRandomClue(clueTier);
-            clueText.text = activeClue.clueText;
+            clueText.Text = activeClue.clueText;
 
             AssignColorsToWires(activeClue.answerColor);
 
