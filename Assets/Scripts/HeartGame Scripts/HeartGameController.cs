@@ -24,12 +24,16 @@ namespace SobGameJam.MiniGames
         [SerializeField] private int safeMin = 60;
         [SerializeField] private int safeMax = 70;
         [SerializeField] private GameObject indicator;
-        [SerializeField] private GameObject tutorialPanel;
 
-        private bool tutorialShown;
+
         private bool isPhaseTwo = false;
         private float currentScore = 0;
 
+
+        private void Start()
+        {
+            OnGameStarted(1);
+        }
 
 
         protected override void OnGameStarted(int roundNumber)
@@ -45,7 +49,6 @@ namespace SobGameJam.MiniGames
             scoreBar.value = currentScore;
 
             spawner.OnOutOfCircles += HandleOutOfCircles;
-            spawner.OnReachedPerfectZone += StartTutorial;
             spawner.OnPerfectTiming += HandlePerfect;
             spawner.OnBadTiming += HandleBadTiming;
             spawner.OnMissed += HandleMissed;
@@ -60,20 +63,9 @@ namespace SobGameJam.MiniGames
             spawner.OnBadTiming -= HandleBadTiming;
             spawner.OnMissed -= HandleMissed;
             spawnerTwo.OnClickedCircle -= StaticPressed;
-            spawner.OnReachedPerfectZone -= StartTutorial;
             Time.timeScale = 1f;
         }
 
-        private void StartTutorial()
-        {
-            if (tutorialShown)
-                return;
-
-            tutorialShown = true;
-
-            Time.timeScale = 0f;
-            tutorialPanel.SetActive(true);
-        }
 
         private void AddScore(float amount)
         {
@@ -103,12 +95,6 @@ namespace SobGameJam.MiniGames
 
         private void HandlePerfect()
         {
-            if (tutorialShown && Time.timeScale == 0f)
-            {
-                tutorialPanel.SetActive(false);
-                Time.timeScale = 1f;
-            }
-
             AddScore(perfectPoints);
         }
         private void StaticPressed()

@@ -10,7 +10,7 @@ namespace SobGameJam.UI
     /// <summary>
     /// Listens to GameManager's broadcast events and updates all UI screens accordingly.
     /// Owns no game logic — purely reactive display + button-triggered calls
-    /// back into GameManager (Start/Restart) and Unity's own app APIs (Exit).
+    /// back into GameManager (Start/Restart/ReturnToMenu) and Unity's own app APIs (Exit).
     /// </summary>
     public class UIManager : MonoBehaviour
     {
@@ -22,7 +22,7 @@ namespace SobGameJam.UI
         [Header("Gameplay HUD")]
         [Tooltip("Assign in order, index 0 = first heart, etc.")]
         [SerializeField] private Image[] heartDimmedOverlays;
-        [SerializeField] private UniText roundNumberText; // swap for TMPro.TextMeshProUGUI if your project uses TMP
+        [SerializeField] private UniText roundNumberText;
 
         [Header("Game Over Screen")]
         [SerializeField] private UniText finalRoundText;
@@ -32,7 +32,7 @@ namespace SobGameJam.UI
         [SerializeField] private UniText mainMenuHighScoreText;
 
         [Header("Game Manager Reference")]
-        [Tooltip("Drag the GameManager GameObject here so Start/Restart can call back into it.")]
+        [Tooltip("Drag the GameManager GameObject here so Start/Restart/ReturnToMenu can call back into it.")]
         [SerializeField] private GameManager gameManager;
 
         [Header("Events (Listening To)")]
@@ -83,8 +83,8 @@ namespace SobGameJam.UI
             gameplayHUD.SetActive(true);
             gameOverScreen.SetActive(false);
 
-            // THIS is the actual trigger for gameplay to begin loading —
-            // nothing happens on GameManager's side until this fires.
+            // THIS is the only place that should ever trigger a first BeginNewRun()
+            // from the Main Menu — nothing happens on GameManager's side until this fires.
             gameManager.BeginNewRun();
         }
 
@@ -142,21 +142,26 @@ namespace SobGameJam.UI
                 highScoreText.Text = "Best: " + PlayerPrefs.GetInt(HighScoreKey, 0);
         }
 
-        /// <summary>Wire this to the Game Over screen's Restart button OnClick().</summary>
+        /// <summary>
+        /// Wire this to the Game Over screen's Restart button OnClick().
+        /// Cleans up the old mini-game scene, then GameManager automatically
+        /// begins a new run — no menu in between.
+        /// </summary>
         public void OnRestartButtonPressed()
         {
             gameOverScreen.SetActive(false);
             gameplayHUD.SetActive(true);
-            gameManager.RestartGame(); // resets lives/round; high score is untouched since it lives in PlayerPrefs, not GameManager
+            gameManager.RestartGame();
         }
 
-        /// <summary>Wire this to the Game Over screen's Main Menu button OnClick().</summary>
+        /// <summary>
+        /// Wire this to the Game Over screen's Main Menu button OnClick().
+        /// Cleans up the old mini-game scene but does NOT start a new run —
+        /// GameManager stays idle until the player presses Start again.
+        /// </summary>
         public void OnGameOverMainMenuPressed()
         {
-            // Stop any in-flight run and return fully to the menu.
-            // We don't call BeginNewRun() here — that only happens when
-            // Start is pressed again from the Main Menu.
-            gameManager.RestartGame();
+            gameManager.ReturnToMenu();
             ShowMainMenu();
         }
 
