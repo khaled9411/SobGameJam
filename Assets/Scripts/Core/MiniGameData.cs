@@ -12,6 +12,10 @@ namespace SobGameJam.Core
         [Tooltip("The name of the scene to load additively. MUST match exactly.")]
         public string sceneName;
 
+        public Sprite instructionSprite;
+
+        public string gameName;
+
         [Tooltip("The text prompt to show the player before the game starts (e.g., 'JUMP!', 'DODGE!').")]
         public string instructionPrompt;
 

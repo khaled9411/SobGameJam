@@ -18,6 +18,7 @@ namespace SobGameJam.UI
         [SerializeField] private GameObject mainMenuScreen;
         [SerializeField] private GameObject gameplayHUD;
         [SerializeField] private GameObject gameOverScreen;
+        [SerializeField] private GameObject InstructionScreen;
 
         [Header("Gameplay HUD")]
         [Tooltip("Assign in order, index 0 = first heart, etc.")]
@@ -31,6 +32,12 @@ namespace SobGameJam.UI
         [Header("Main Menu Screen")]
         [SerializeField] private UniText mainMenuHighScoreText;
 
+        [Header("Instruction Screen")]
+        [SerializeField] private UniText gameTitle;
+        [SerializeField] private UniText gameInstruction;
+        [SerializeField] private Image gameSprite;
+
+
         [Header("Game Manager Reference")]
         [Tooltip("Drag the GameManager GameObject here so Start/Restart/ReturnToMenu can call back into it.")]
         [SerializeField] private GameManager gameManager;
@@ -39,6 +46,8 @@ namespace SobGameJam.UI
         [SerializeField] private IntEventChannelSO onLivesChangedEvent;
         [SerializeField] private IntEventChannelSO onGameOverEvent;
         [SerializeField] private IntEventChannelSO onRoundStartedEvent; // same asset GameManager broadcasts on
+        [SerializeField] private MiniGameEventChannelSO OnMiniGamechooseEvent;
+        [SerializeField] private VoidEventChannelSO OnInstructionTimeEnd;
 
         private const string HighScoreKey = "HighScore";
 
@@ -47,6 +56,22 @@ namespace SobGameJam.UI
             if (onLivesChangedEvent != null) onLivesChangedEvent.OnEventRaised += HandleLivesChanged;
             if (onGameOverEvent != null) onGameOverEvent.OnEventRaised += HandleGameOver;
             if (onRoundStartedEvent != null) onRoundStartedEvent.OnEventRaised += HandleRoundStarted;
+            if(OnMiniGamechooseEvent != null) OnMiniGamechooseEvent.OnEventRaised += HandleInstruction;
+            if(OnInstructionTimeEnd != null) OnInstructionTimeEnd.OnEventRaised += HideInsturction;
+        }
+
+        private void HideInsturction()
+        {
+            InstructionScreen.SetActive(false);
+        }
+
+        private void HandleInstruction(MiniGameData arg0)
+        {
+            InstructionScreen.SetActive(true);
+            gameInstruction.Text = arg0.instructionPrompt;
+            gameTitle.Text = arg0.gameName;
+            gameSprite.sprite = arg0.instructionSprite;
+            
         }
 
         private void OnDisable()
