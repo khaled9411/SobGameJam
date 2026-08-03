@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using SobGameJam.Core;
 using SobGameJam.Events;
@@ -9,7 +9,7 @@ namespace SobGameJam.UI
 {
     /// <summary>
     /// Listens to GameManager's broadcast events and updates all UI screens accordingly.
-    /// Owns no game logic � purely reactive display + button-triggered calls
+    /// Owns no game logic — purely reactive display + button-triggered calls
     /// back into GameManager (Start/Restart/ReturnToMenu) and Unity's own app APIs (Exit).
     /// </summary>
     public class UIManager : MonoBehaviour
@@ -59,7 +59,7 @@ namespace SobGameJam.UI
         private void Start()
         {
             // GameManager.Start() no longer auto-begins a run, so it is safe for
-            // the Main Menu to simply be the first thing shown � nothing is loading
+            // the Main Menu to simply be the first thing shown — nothing is loading
             // behind it yet.
             ShowMainMenu();
         }
@@ -73,7 +73,7 @@ namespace SobGameJam.UI
             gameOverScreen.SetActive(false);
 
             if (mainMenuHighScoreText != null)
-                mainMenuHighScoreText.Text = "Best: " + PlayerPrefs.GetInt(HighScoreKey, 0);
+                mainMenuHighScoreText.Text = "الرقم القياسي: " + PlayerPrefs.GetInt(HighScoreKey, 0);
         }
 
         /// <summary>Wire this to the Main Menu's Start button OnClick().</summary>
@@ -84,7 +84,7 @@ namespace SobGameJam.UI
             gameOverScreen.SetActive(false);
 
             // THIS is the only place that should ever trigger a first BeginNewRun()
-            // from the Main Menu � nothing happens on GameManager's side until this fires.
+            // from the Main Menu — nothing happens on GameManager's side until this fires.
             gameManager.BeginNewRun();
         }
 
@@ -118,7 +118,7 @@ namespace SobGameJam.UI
         private void HandleRoundStarted(int roundNumber)
         {
             if (roundNumberText != null)
-                roundNumberText.Text = "Round " + roundNumber;
+                roundNumberText.Text = "الجولة: " + roundNumber;
         }
 
         // ---------- GAME OVER ----------
@@ -129,7 +129,7 @@ namespace SobGameJam.UI
             gameOverScreen.SetActive(true);
 
             if (finalRoundText != null)
-                finalRoundText.Text = "Round Reached: " + finalRound;
+                finalRoundText.Text = "الجولة: " + finalRound;
 
             int previousHighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
             if (finalRound > previousHighScore)
@@ -139,13 +139,13 @@ namespace SobGameJam.UI
             }
 
             if (highScoreText != null)
-                highScoreText.Text = "Best: " + PlayerPrefs.GetInt(HighScoreKey, 0);
+                highScoreText.Text = "الرقم القياسي: " + PlayerPrefs.GetInt(HighScoreKey, 0);
         }
 
         /// <summary>
         /// Wire this to the Game Over screen's Restart button OnClick().
         /// Cleans up the old mini-game scene, then GameManager automatically
-        /// begins a new run � no menu in between.
+        /// begins a new run — no menu in between.
         /// </summary>
         public void OnRestartButtonPressed()
         {
@@ -156,7 +156,7 @@ namespace SobGameJam.UI
 
         /// <summary>
         /// Wire this to the Game Over screen's Main Menu button OnClick().
-        /// Cleans up the old mini-game scene but does NOT start a new run �
+        /// Cleans up the old mini-game scene but does NOT start a new run —
         /// GameManager stays idle until the player presses Start again.
         /// </summary>
         public void OnGameOverMainMenuPressed()
