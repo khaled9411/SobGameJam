@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
@@ -114,6 +116,7 @@ public class HeartMonitor : MonoBehaviour
         return Mathf.Lerp(minSpikeHeight, maxSpikeHeight, random01);
     }
 
+#if UNITY_EDITOR
     // Automatically set up a realistic P-QRS-T wave when the script is added
     private void Reset()
     {
@@ -136,6 +139,7 @@ public class HeartMonitor : MonoBehaviour
             AnimationUtility.SetKeyRightTangentMode(heartbeatCurve, i, AnimationUtility.TangentMode.Auto);
         }
     }
+#endif
     public void SetSpikeHeight(float min, float max)
     {
         maxSpikeHeight = max;
