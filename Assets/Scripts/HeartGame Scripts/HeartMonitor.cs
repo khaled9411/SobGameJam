@@ -136,4 +136,9 @@ public class HeartMonitor : MonoBehaviour
             AnimationUtility.SetKeyRightTangentMode(heartbeatCurve, i, AnimationUtility.TangentMode.Auto);
         }
     }
+    public void SetSpikeHeight(float min, float max)
+    {
+        maxSpikeHeight = max;
+        minSpikeHeight = min;
+    }
 }

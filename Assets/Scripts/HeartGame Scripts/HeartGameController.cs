@@ -24,10 +24,23 @@ namespace SobGameJam.MiniGames
         [SerializeField] private int safeMin = 60;
         [SerializeField] private int safeMax = 70;
         [SerializeField] private GameObject indicator;
+        [Header("Timer")]
+        [SerializeField] private Image timerFill;
+        [SerializeField] private HeartMonitor heartMonitor;
+        [Header("SFX")]
+        [SerializeField] private AudioSource audioSource;
+
+        [SerializeField] private AudioClip perfectSFX;
+        [SerializeField] private AudioSource backgroundAudio;
+
+       
+        [SerializeField] private AudioClip heartbeatLoop;
+
 
 
         private bool isPhaseTwo = false;
         private float currentScore = 0;
+        private Coroutine spikeRoutine;
 
 
         private void Start()
@@ -42,13 +55,17 @@ namespace SobGameJam.MiniGames
 
             float difficulty = difficultyCurve.Evaluate(roundNumber); //difficulty
             spawner.SetDifficulty(difficulty);
+           
+           
+            backgroundAudio.Play();
+            heartMonitor.SetSpikeHeight(0f,0f);
 
             phaseTwoDuration = Mathf.Lerp(20f, 10f, difficulty);
 
             scoreBar.maxValue = maxScore;
             scoreBar.value = currentScore;
 
-            Debug.Log("Subscribing to events");
+            timerFill.gameObject.SetActive(false);
             spawner.OnOutOfCircles += HandleOutOfCircles;
             spawner.OnPerfectTiming += HandlePerfect;
             spawner.OnBadTiming += HandleBadTiming;
@@ -98,10 +115,21 @@ namespace SobGameJam.MiniGames
         {
             Debug.Log("Controller received perfect");
             AddScore(perfectPoints);
+            heartMonitor.SetSpikeHeight(1f, 1f);
+
+            audioSource.PlayOneShot(perfectSFX);
+
+            if (spikeRoutine != null)
+                StopCoroutine(spikeRoutine);
+
+            heartMonitor.SetSpikeHeight(1f, 1f);
+            spikeRoutine = StartCoroutine(ResetSpikeRoutine());
+
         }
         private void StaticPressed()
         {
             AddScore(staticPoints);
+            audioSource.PlayOneShot(perfectSFX);
         }
 
         private void HandleBadTiming()
@@ -130,10 +158,16 @@ namespace SobGameJam.MiniGames
             if (!isPhaseTwo && currentScore >= maxScore)
             {
                 isPhaseTwo = true;
+                backgroundAudio.clip = heartbeatLoop;
+                backgroundAudio.Play();
 
                 currentScore = 0;
                 RefreshScoreBar();
+                heartMonitor.SetSpikeHeight(1f, 1f);
+
                 indicator.SetActive(true);
+                timerFill.gameObject.SetActive(true);
+                timerFill.fillAmount = 1f;
                 spawnerTwo.OnClickedCircle += StaticPressed;
                 spawner.StopSpawning();
                 spawnerTwo.StartSpawning();
@@ -160,18 +194,33 @@ namespace SobGameJam.MiniGames
 
             while (timer > 0)
             {
-                Debug.Log(Mathf.CeilToInt(timer));
+                timer -= Time.deltaTime;
 
-                yield return new WaitForSeconds(1f);
+                timerFill.fillAmount = timer / phaseTwoDuration;
 
-                timer -= 1f;
+                yield return null;
             }
 
+            timerFill.fillAmount = 0f;
+
             EndPhaseTwo();
+        }
+
+        private IEnumerator ResetSpikeRoutine()
+        {
+            yield return new WaitForSeconds(0.2f);
+
+            if (!isPhaseTwo)
+            {
+                heartMonitor.SetSpikeHeight(0f, 0f);
+            }
+
+            spikeRoutine = null;
         }
         private void EndPhaseTwo()
         {
             isPhaseTwo = false;
+            timerFill.gameObject.SetActive(false);
 
             spawnerTwo.StopSpawning();
 
@@ -183,8 +232,13 @@ namespace SobGameJam.MiniGames
                 
             else
             {
+
                 LoseGame();
                 Debug.Log("GameLost");
+                heartMonitor.SetSpikeHeight(0f, 0f);
+                spawnerTwo.StopSpawning();
+               
+               
 
             }
         }

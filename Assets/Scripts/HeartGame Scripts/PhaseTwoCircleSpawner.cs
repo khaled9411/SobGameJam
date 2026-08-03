@@ -20,7 +20,12 @@ public class PhaseTwoCircleSpawner : MonoBehaviour
     }
     public void StopSpawning()
     {
-        StopCoroutine(SpawnRoutine());
+        StopAllCoroutines();
+
+        foreach (Transform child in parent)
+        {
+            Destroy(child.gameObject);
+        }
     }
     IEnumerator SpawnRoutine()
     {
