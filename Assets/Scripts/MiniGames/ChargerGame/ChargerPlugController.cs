@@ -12,13 +12,15 @@ namespace SobGameJam.MiniGames.ChargerGame
 
         [Tooltip("Speed multiplier for mouse delta input.")]
         [SerializeField] private float moveSpeed = 0.05f;
-        [SerializeField] private float rotationSpeed; 
+        [SerializeField] private float rotationSpeed;
+        [SerializeField] private AudioSource movesound;
 
         [SerializeField] private TrailRenderer trail;
 
         private ChargerGameInput inputActions;
         private Vector2 currentDelta;
         private bool isGameActive = false;
+        private float lastplaysound;
 
         private void Awake()
         {
@@ -61,16 +63,33 @@ namespace SobGameJam.MiniGames.ChargerGame
 
         private void Update()
         {
-            if (!isGameActive) return;
+            if (!isGameActive)
+            {
+                movesound.Stop();
+                return;
+            }
+            
 
             // Move the plug based on mouse delta
             if (currentDelta.sqrMagnitude > 0)
             {
+                if (!movesound.isPlaying)
+                { 
+                    movesound.Play(); 
+                }
                 transform.position += (Vector3)(currentDelta * moveSpeed * Time.deltaTime);
                 UpdateVisuals();
                 // Also reset delta after processing it to avoid continuous movement 
                 // if the mouse stops but no new event is fired.
                 currentDelta = Vector2.zero;
+                lastplaysound = Time.time;
+            }
+            else
+            {
+                if (Time.time - lastplaysound > .2)
+                {
+                    movesound.Stop();
+                }
             }
         }
         void UpdateVisuals()

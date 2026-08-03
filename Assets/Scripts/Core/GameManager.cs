@@ -24,6 +24,7 @@ namespace SobGameJam.Core
         [SerializeField] private VoidEventChannelSO miniGameWonEvent;
         [SerializeField] private VoidEventChannelSO miniGameLostEvent;
         
+        
 
         [Header("Events (Broadcasting)")]
         [SerializeField] private IntEventChannelSO onRoundStartedEvent; // Sends round number to the mini-game
@@ -31,6 +32,11 @@ namespace SobGameJam.Core
         [SerializeField] private IntEventChannelSO onGameOverEvent;     // Sends final round number when the run ends
         [SerializeField] private MiniGameEventChannelSO OnChoosingMiniGame;
         [SerializeField] private VoidEventChannelSO OnInstructionTimeEnd;
+
+
+        [Header("setting")]
+        [SerializeField] private float timeAfterInsturctionHideToPlay = 1;
+        [SerializeField] private Camera cam;
 
         private MiniGameData currentMiniGame;
         private int lastMiniGameIndex = -1;
@@ -109,6 +115,7 @@ namespace SobGameJam.Core
 
             if (currentMiniGame != null)
             {
+                cam.gameObject.SetActive(true);
                 AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(currentMiniGame.sceneName);
                 if (asyncUnload != null)
                 {
@@ -176,6 +183,7 @@ namespace SobGameJam.Core
             // 3. Unload current mini-game scene
             if (currentMiniGame != null)
             {
+                cam.gameObject.SetActive(true);
                 AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(currentMiniGame.sceneName);
                 while (!asyncUnload.isDone)
                 {
@@ -219,12 +227,15 @@ namespace SobGameJam.Core
             {
                 yield return null;
             }
+
+            cam.gameObject.SetActive(false);
+
             float timedif = Time.time - instructionStartTime;
             yield return new WaitForSeconds(timedif >= currentMiniGame.instructionDuration ? 0: currentMiniGame.instructionDuration - timedif );
             // hide instruction screen
             OnInstructionTimeEnd.RaiseEvent();
             //wait before start
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(timeAfterInsturctionHideToPlay);
             // Broadcast the Round Number. The newly loaded MiniGameController should be listening for this to start.
             if (onRoundStartedEvent != null)
             {

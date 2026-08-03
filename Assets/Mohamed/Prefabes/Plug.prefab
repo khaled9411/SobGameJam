@@ -114,6 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.MiniGames.ChargerGame.ChargerPlugController
   moveSpeed: 1.25
   rotationSpeed: 10
+  movesound: {fileID: 2432115948011262552}
   trail: {fileID: 2297012412257284533}
 --- !u!50 &4022979802453694174
 Rigidbody2D:
@@ -366,7 +367,7 @@ AudioSource:
   m_GameObject: {fileID: 5740530303079225279}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: d6529c3ff7d83f64e85ca874db2c57dc, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 2abaf469eb06373448930593c6d8e0d4, type: 3}
   m_PlayOnAwake: 1
