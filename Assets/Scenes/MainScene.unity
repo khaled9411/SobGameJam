@@ -899,7 +899,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  text: "\u0627\u0644\u062C\u0648\u0644\u0629: 888"
+  text: "\u0627\u0644\u062C\u0648\u0644\u0629: 0"
   fontStack: {fileID: 11400000, guid: 72f6e3edfbc82804791ebe8e4814fa46, type: 2}
   appearance: {fileID: 11400000, guid: 930c5417724e36743bc41f10f8eef918, type: 2}
   fontSize: 70
@@ -3341,6 +3341,7 @@ MonoBehaviour:
   OnInstructionTimeEnd: {fileID: 11400000, guid: 33f3495de827af34786e2df603ec8f30, type: 2}
   uiAudioSource: {fileID: 462569143}
   appearSound: {fileID: 8300000, guid: 5ea6f416ddae34506a49c86aa5fe2582, type: 3}
+  heartLossSound: {fileID: 8300000, guid: f34d30c74afb14d7cba68e12498ad2e5, type: 3}
 --- !u!4 &1164214782
 Transform:
   m_ObjectHideFlags: 0
