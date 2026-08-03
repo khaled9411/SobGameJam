@@ -3341,6 +3341,7 @@ MonoBehaviour:
   OnInstructionTimeEnd: {fileID: 11400000, guid: 33f3495de827af34786e2df603ec8f30, type: 2}
   uiAudioSource: {fileID: 462569143}
   appearSound: {fileID: 8300000, guid: 5ea6f416ddae34506a49c86aa5fe2582, type: 3}
+  heartLossSound: {fileID: 8300000, guid: f34d30c74afb14d7cba68e12498ad2e5, type: 3}
 --- !u!4 &1164214782
 Transform:
   m_ObjectHideFlags: 0

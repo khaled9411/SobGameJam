@@ -55,6 +55,7 @@ namespace SobGameJam.UI
         [Header("Audio Settings")]
         [SerializeField] private AudioSource uiAudioSource;
         [SerializeField] private AudioClip appearSound;
+        [SerializeField] private AudioClip heartLossSound;
 
         private const string HighScoreKey = "HighScore";
         private int _currentLives = -1;
@@ -90,6 +91,15 @@ namespace SobGameJam.UI
                 uiAudioSource.PlayOneShot(appearSound);
             }
         }
+
+        private void PlayHeartLossSound()
+        {
+            if (uiAudioSource != null && heartLossSound != null)
+            {
+                uiAudioSource.PlayOneShot(heartLossSound);
+            }
+        }
+
 
         private void StartLogoFloatingAnimation()
         {
@@ -163,7 +173,6 @@ namespace SobGameJam.UI
                 foreach (var btn in mainMenuButtons)
                 {
                     btn.localScale = Vector3.zero;
-
                     mainMenuIntroSequence.Append(btn.DOScale(Vector3.one, 0.4f).SetEase(Ease.OutBack).OnStart(PlayAppearSound));
                 }
             }
@@ -258,6 +267,8 @@ namespace SobGameJam.UI
             dimmedHeartOverlay.color = Color.white;
 
             Sequence lossSeq = DOTween.Sequence();
+
+            lossSeq.OnStart(PlayHeartLossSound);
 
             lossSeq.Append(rect.DOScale(Vector3.one * 1.6f, 0.15f).SetEase(Ease.OutBack));
             lossSeq.Join(dimmedHeartOverlay.DOColor(Color.red, 0.15f));
