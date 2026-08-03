@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9c9de9978f265459be332d313e0d17, type: 3}
   m_Name: Clue 9
   m_EditorClassIdentifier: Assembly-CSharp::SobGameJam.MiniGames.WireCut.WireClueSO
-  clueText: Blue and Yellow makes...
+  clueText: "\u0627\u0644\u0623\u0632\u0631\u0642 \u0645\u0639 \u0627\u0644\u0623\u0635\u0641\u0631
+    \u064A\u0635\u0646\u0639\u0627\u0646....."
   answerColor: 3
   difficultyTier: 3
