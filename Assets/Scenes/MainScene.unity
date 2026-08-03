@@ -899,7 +899,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  text: "\u0627\u0644\u062C\u0648\u0644\u0629: 888"
+  text: "\u0627\u0644\u062C\u0648\u0644\u0629: 0"
   fontStack: {fileID: 11400000, guid: 72f6e3edfbc82804791ebe8e4814fa46, type: 2}
   appearance: {fileID: 11400000, guid: 930c5417724e36743bc41f10f8eef918, type: 2}
   fontSize: 70
