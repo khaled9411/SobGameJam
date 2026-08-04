@@ -1,4 +1,4 @@
-# WarioWare Mini-Game Developer Guide
+110# WarioWare Mini-Game Developer Guide
 
 Welcome to the team! This guide explains how to build independent mini-games for our WarioWare-style framework. 
 
