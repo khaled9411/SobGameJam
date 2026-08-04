@@ -6391,7 +6391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e36d6c577e32744c81b0011aeba3e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenURLButton
-  url: https://www.linkedin.com/in/menna-omar-04202a3b2/
+  url: https://mennaomar100.github.io/mennaomar100Portfolio.github.io/
 --- !u!1 &1285253852
 GameObject:
   m_ObjectHideFlags: 0
@@ -7331,7 +7331,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1490148622
 Transform:
   m_ObjectHideFlags: 0
@@ -7525,7 +7525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e36d6c577e32744c81b0011aeba3e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenURLButton
-  url: https://www.linkedin.com/in/khaled-ibrahem-662036201/
+  url: https://mostaql.com/u/KhaledIbrahem0/portfolio
 --- !u!1 &1581368141
 GameObject:
   m_ObjectHideFlags: 0
