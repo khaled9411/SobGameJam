@@ -32,10 +32,12 @@ namespace SobGameJam.MiniGames.ChargerGame
         private void OnEnable()
         {
             inputActions.Enable();
+            Application.targetFrameRate = 120;
         }
         private void OnDisable()
         {
             inputActions.Disable();
+            Application.targetFrameRate = -1;
         }
         private void OnDestroy()
         {
