@@ -137,7 +137,7 @@ namespace SobGameJam.MiniGames
             survivalTimer += Time.deltaTime;
             currentScale -= currentLevel.leakRate * Time.deltaTime;
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetMouseButtonDown(0))
             {
                 PumpBalloon();
             }
@@ -367,7 +367,7 @@ namespace SobGameJam.MiniGames
             if (nextPumpText != null)
             {
                 float nextPumpPercentage = currentLevel.inflationSteps[currentStepIndex] * 100f;
-                nextPumpText.Text = "النفخه الجايه: +" + nextPumpPercentage.ToString("F0") + "%" +"\n اضغط Space";
+                nextPumpText.Text = "النفخه الجايه: +" + nextPumpPercentage.ToString("F0") + "%" +"\n اضغط بالماوس";
             }
         }
 
