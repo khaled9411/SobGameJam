@@ -57,8 +57,8 @@ namespace SobGameJam.MiniGames.ChargerGame
                 hasSavedCameraState = true;
             }
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = false;
 
             // Evaluate Difficulty Curves
             currentTimeLimit = gameData.timeLimitCurve.Evaluate(roundNumber);
