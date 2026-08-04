@@ -20,6 +20,18 @@ namespace SobGameJam.UI
         [SerializeField] private RectTransform[] mainMenuButtons;
         private Sequence mainMenuIntroSequence;
 
+        [Header("Name Slots (Team Credits - drag the 4 name RectTransforms here)")]
+        [Tooltip("Assign the 4 name text RectTransforms. They'll float/wobble independently, staggered.")]
+        [SerializeField] private RectTransform[] nameSlots;
+        [Tooltip("How far each name bobs up/down, in UI units.")]
+        [SerializeField] private float nameFloatDistance = 10f;
+        [Tooltip("How long one bob cycle takes, in seconds.")]
+        [SerializeField] private float nameFloatDuration = 1.2f;
+        [Tooltip("How much each name tilts side to side, in degrees.")]
+        [SerializeField] private float nameTiltAngle = 4f;
+        [Tooltip("Delay added between each successive name slot's animation start, for a staggered wave effect.")]
+        [SerializeField] private float nameStaggerDelay = 0.15f;
+
         [Header("Gameplay HUD")]
         [Tooltip("Assign in order, index 0 = first heart, etc.")]
         [SerializeField] private Image[] heartDimmedOverlays;
@@ -57,6 +69,10 @@ namespace SobGameJam.UI
         [SerializeField] private AudioClip appearSound;
         [SerializeField] private AudioClip heartLossSound;
 
+        [Header("Button Click Particle Effect")]
+        [Tooltip("Drag the ParticleSystem you want to play on button click here.")]
+        [SerializeField] private ParticleSystem buttonClickParticle;
+
         private const string HighScoreKey = "HighScore";
         private int _currentLives = -1;
 
@@ -82,6 +98,7 @@ namespace SobGameJam.UI
         {
             ShowMainMenu();
             StartLogoFloatingAnimation();
+            StartNameSlotsAnimation();
         }
 
         private void PlayAppearSound()
@@ -100,6 +117,16 @@ namespace SobGameJam.UI
             }
         }
 
+        // ---------- BUTTON CLICK PARTICLE EFFECT ----------
+
+        /// Call this from a Button's OnClick() event to play the assigned particle effect.
+        public void PlayButtonClickParticle()
+        {
+            if (buttonClickParticle != null)
+            {
+                buttonClickParticle.Play();
+            }
+        }
 
         private void StartLogoFloatingAnimation()
         {
@@ -113,6 +140,32 @@ namespace SobGameJam.UI
                 mainMenuLogo.DORotate(new Vector3(0, 0, 2f), 2f)
                     .SetLoops(-1, LoopType.Yoyo)
                     .SetEase(Ease.InOutSine);
+            }
+        }
+
+        // ---------- NAME SLOTS (Team Credits) ----------
+
+        private void StartNameSlotsAnimation()
+        {
+            if (nameSlots == null || nameSlots.Length == 0) return;
+
+            for (int i = 0; i < nameSlots.Length; i++)
+            {
+                RectTransform slot = nameSlots[i];
+                if (slot == null) continue;
+
+                float startDelay = i * nameStaggerDelay;
+
+                slot.DOAnchorPosY(nameFloatDistance, nameFloatDuration)
+                    .SetRelative(true)
+                    .SetEase(Ease.InOutSine)
+                    .SetLoops(-1, LoopType.Yoyo)
+                    .SetDelay(startDelay);
+
+                slot.DORotate(new Vector3(0, 0, nameTiltAngle), nameFloatDuration * 1.3f)
+                    .SetEase(Ease.InOutSine)
+                    .SetLoops(-1, LoopType.Yoyo)
+                    .SetDelay(startDelay);
             }
         }
 
